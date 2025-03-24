@@ -1,0 +1,16 @@
+export const studentsData = [
+  { name: "John Doe", class: "Class 1", debt: 500 },
+  { name: "Jane Smith", class: "Class 2", debt: 300 },
+  { name: "Michael Brown", class: "Class 1", debt: 700 },
+  { name: "Emily Davis", class: "Class 3", debt: 200 },
+  { name: "Chris Wilson", class: "Class 2", debt: 450 },
+  { name: "Augustine Love Stephens", class: "Class 4", debt: 100 },
+  { name: "Amazing Love Stephens", class: "J.H.S 2", debt: 100 },
+  { name: "Marvelous Grace Brace", class: "J.H.S 1", debt: 100 },
+  { name: "Romeo Degbeh", class: "Class 4", debt: 100 },
+  { name: "Daniel De-Graft Brace", class: "J.H.S 3", debt: 100 },
+  { name: "Olivia", class: "Class 4", debt: 100 },
+  { name: "Elijah Darkeh", class: "Class 4", debt: 100 },
+  { name: "Enoch Mensah", class: "Class 4", debt: 100 },
+  { name: "Emmanuel Eshun", class: "Class 4", debt: 100 },
+];
