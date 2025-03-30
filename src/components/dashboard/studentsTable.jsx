@@ -1,20 +1,20 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
 
-const StudentTable = (props) => {
+const StudentTable = ({ studentsData, filteredClass }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedClass, setSelectedClass] = useState("");
   const navigate = useNavigate();
 
-  const filteredStudents = props.studentsData.filter((student) =>
-    student.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
-    (selectedClass ? student.class === selectedClass : true)
+  const filteredStudents = studentsData.filter(
+    (student) =>
+      student.studentName.toLowerCase().includes(searchTerm.toLowerCase()) &&
+      (selectedClass ? student.studentClass === selectedClass : true)
   );
 
   const handleRowClick = (student) => {
-  navigate(`studentDetails`, { state: { student } });
-};
-
+    navigate(`studentDetails`, { state: { student } });
+  };
 
   return (
     <div className="p-6 w-[100%] mx-auto">
@@ -29,10 +29,10 @@ const StudentTable = (props) => {
           className="border p-2 rounded"
           onChange={(e) => setSelectedClass(e.target.value)}
         >
-          <option value="">{props.filteredClass ? props.filteredClass : "All Classes"}</option>
-          {[...new Set(props.studentsData.map((s) => s.class))].map((cls) => (
+          <option value="">{filteredClass || "All Classes"}</option>
+          {[...new Set(studentsData.map((s) => s.studentClassName))].map((cls) => (
             <option key={cls} value={cls}>
-            {cls}
+              {cls}
             </option>
           ))}
         </select>
@@ -40,7 +40,7 @@ const StudentTable = (props) => {
       <table className="w-full border-collapse border border-gray-300">
         <thead>
           <tr className="bg-[#b3b3b3]">
-            <th className="border p-2">#</th>
+            <th className="border p-2">No.</th>
             <th className="border p-2">Student Name</th>
             <th className="border p-2">Class</th>
             <th className="border p-2">Total Debt</th>
@@ -49,15 +49,14 @@ const StudentTable = (props) => {
         <tbody>
           {filteredStudents.map((student, index) => (
             <tr
-            key={index}
-            className="text-center border cursor-pointer hover:bg-gray-200"
-            onClick={() => handleRowClick(student)}
-          >
-          
+              key={index}
+              className="text-center border cursor-pointer hover:bg-gray-200"
+              onClick={() => handleRowClick(student)}
+            >
               <td className="border p-2">{index + 1}</td>
-              <td className="border p-2">{student.name}</td>
-              <td className="border p-2">{student.class}</td>
-              <td className="border p-2">${student.debt}</td>
+              <td className="border p-2">{student.studentName}</td>
+              <td className="border p-2">{student.studentClassName}</td>
+              <td className="border p-2">${student.fees.reduce((acc, fee) => acc + fee.amount, 0)}</td>
             </tr>
           ))}
         </tbody>

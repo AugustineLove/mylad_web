@@ -1,61 +1,30 @@
-import { useState } from "react";
-import { useNavigate } from "react-router";
 
-const TransactionTable = (props) => {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedClass, setSelectedClass] = useState("");
-  const navigate = useNavigate();
-
-  const filteredStudents = props.studentsData.filter((student) =>
-    student.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
-    (selectedClass ? student.class === selectedClass : true)
-  );
-
-  const handleRowClick = (studentId) => {
-    navigate(`studentDetails?id=${studentId}`);
-  };
+const TransactionTable = ({ transactions }) => {
+  if (!transactions.length) {
+    return <p className="text-center mt-4 text-red-500">No transactions found.</p>;
+  }
 
   return (
-    <div className="p-6 w-[100%] mx-auto">
-      <div className="flex justify-between mb-4">
-        <input
-          type="text"
-          placeholder="Search by name..."
-          className="border p-2 rounded w-1/2"
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-        <select
-          className="border p-2 rounded"
-          onChange={(e) => setSelectedClass(e.target.value)}
-        >
-          <option value="">{props.filteredClass ? props.filteredClass : "All Classes"}</option>
-          {[...new Set(props.studentsData.map((s) => s.class))].map((cls) => (
-            <option key={cls} value={cls}>
-              Class {cls}
-            </option>
-          ))}
-        </select>
-      </div>
+    <div className="p-6 w-full mx-auto">
       <table className="w-full border-collapse border border-gray-300">
         <thead>
-          <tr className="bg-[#b3b3b3]">
+          <tr className="bg-gray-200">
             <th className="border p-2">#</th>
-            <th className="border p-2">Type of Transaction</th>
-            <th className="border p-2">Amount</th>
+            <th className="border p-2">Amount (GHC)</th>
             <th className="border p-2">Date</th>
+            <th className="border p-2">Transaction Type</th>
+            <th className="border p-2">Payment Method</th>
           </tr>
         </thead>
         <tbody>
-          {filteredStudents.map((student, index) => (
-            <tr
-              key={index}
-              className="text-center border cursor-pointer hover:bg-gray-200"
-              onClick={() => handleRowClick(student.id)}
-            >
+          {transactions.map((transaction, index) => (
+            <tr key={index} className="text-center border hover:bg-gray-100">
               <td className="border p-2">{index + 1}</td>
-              <td className="border p-2">{student.name}</td>
-              <td className="border p-2">{student.amount}</td>
-              <td className="border p-2">{student.date}</td>
+              <td className="border p-2">{transaction.amount}</td>
+              <td className="border p-2">{new Date(transaction.date).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })
+            }</td>
+              {transaction.transactionType === "Credit" ? <td className="border p-2 border-black text-green-500">{transaction.transactionType}</td> : <td className="border p-2 border-black text-red-500">{transaction.transactionType}</td> }
+              <td className="border p-2">{transaction.paymentMethod}</td>
             </tr>
           ))}
         </tbody>
