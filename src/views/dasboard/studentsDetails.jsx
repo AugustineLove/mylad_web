@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import AppButton from '../../components/button';
 import TransactionTable from '../../components/dashboard/transactionTable';
 import { useLocation } from 'react-router';
+import { useSchool } from '../../context/schoolContext';
 
 const StudentsDetails = () => {
   const location = useLocation();
   const student = location.state?.student;
+  const { school } = useSchool()
 
   const [paymentAmount, setPaymentAmount] = useState('');
   const [creditFeeType, setCreditFeeType] = useState('');
@@ -23,14 +25,14 @@ const StudentsDetails = () => {
     window.location.reload();
   };
 
-  const addTransaction = async (studentId, amount, feeType, date, transactionType) => {
+  const addTransaction = async (studentId, schoolId, amount, feeType, date, transactionType) => {
     try {
       console.log(date)
         console.log("Trying to create a transaction")
       const response = await fetch(`http://localhost:3000/api/transactions/${student._id}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ studentId, amount, feeType, date, transactionType }),
+        body: JSON.stringify({ studentId, schoolId, amount, feeType, date, transactionType }),
       });
   
       if (!response.ok) throw new Error("Failed to record transaction");
@@ -59,7 +61,7 @@ const StudentsDetails = () => {
       });
   
       if (response.ok) {
-        addTransaction(student._id, Number(paymentAmount), creditFeeType, dueDate, "Credit");
+        addTransaction(student._id, school._id, Number(paymentAmount), creditFeeType, dueDate, "Credit");
         alert(`Successfully credited $${paymentAmount} to ${creditFeeType}.`);
         setPaymentAmount('');
         refreshPage();
@@ -95,7 +97,7 @@ const StudentsDetails = () => {
       });
   
       if (response.ok) {
-        addTransaction(student._id, Number(debitAmount), debitFeeType, debitDueDate, "Debit");
+        addTransaction(student._id, school._id, Number(debitAmount), debitFeeType, debitDueDate, "Debit");
         alert(`Successfully added $${debitAmount} for ${debitFeeType}.`);
         setDebitAmount('');
         refreshPage();

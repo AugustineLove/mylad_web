@@ -5,9 +5,6 @@ import { useStudents } from "../../context/studentsContext";
 
 const DashboardHome = () => {
   const { students, loading } = useStudents();
-
-  console.log(students)
-
   /* const listofFees = [
     { name: "School Fees", path: "/addSchoolFees", color: "#083C5D" },
     { name: "Admission Fees", path: "/addAdmissionFees", color: "#FFBB39" },

@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
+import autoTable from "jspdf-autotable";
+import jsPDF from "jspdf";
 
 const ClassFees = () => {
   const [students, setStudents] = useState([]);
@@ -68,6 +70,24 @@ const ClassFees = () => {
     navigate(`student?type=${feeType}`, { state: { student } });
   }
 
+  const generatePDFReport = () => {
+    const doc = new jsPDF();
+    doc.text(`${feeType} Report for ${className}`, 14, 10);
+    
+    const tableData = students.map((student, index) => {
+      const fee = student.fees?.find((f) => f.feeType === feeType);
+      return [index + 1, student.studentName, fee ? fee.amount : "Not Assigned", fee ? fee.status : "N/A"];
+    });
+
+    autoTable(doc, {
+      head: [["#", "Student Name", "Amount (GHC)", "Status"]],
+      body: tableData,
+      startY: 20,
+    });
+
+    doc.save(`${feeType}_Report_${className}.pdf`);
+  };
+
   if (loading) return <p className="text-center mt-4">Loading...</p>;
   /* if (error) return <p className="text-center text-red-500 mt-4">{error}</p>; */
   /* if (students.length === 0) return <p className="text-center mt-4">No students found.</p>; */
@@ -115,6 +135,10 @@ const ClassFees = () => {
         value={search}
         onChange={(e) => setSearch(e.target.value)}
       />
+
+<button onClick={generatePDFReport} className="bg-[#014410] text-white px-4 py-2 mb-4 rounded-md hover:cursor-pointer">
+        Generate PDF Report
+      </button>
       
       <div className="overflow-x-auto">
         <table className="min-w-full border-collapse border border-gray-300">

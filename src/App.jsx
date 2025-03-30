@@ -8,7 +8,7 @@ const App = () => {
   const dashboardRoutes = [
     '/dashboard', '/dashboard/transactions', 
     '/dashboard/agents', '/dashboard/messages', 
-    '/dashboard/customers', '/login', '/dashboard/addFees', '/dashboard/addFees/addClassFee', '/dashboard/addFees/addClassFee/studentDetails','/dashboard/studentDetails',
+    '/dashboard/customers', '/login', '/dashboard/addFees', '/dashboard/generalReport', '/dashboard/addFees/addClassFee', '/dashboard/addFees/addClassFee/studentDetails','/dashboard/studentDetails',
     '/dashboard/addStudent', '/dashboard/addFees/selectedFees','/dashboard/addFees/selectedFees/classFee','/dashboard/addFees/selectedFees/classFee/student'
   ];
   const hideNavbarAndFooter = dashboardRoutes.includes(location.pathname);
