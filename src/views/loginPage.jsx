@@ -59,6 +59,7 @@ const Login = () => {
         updateSchool(data.schoolId);
         isSignUp ? window.location.reload() : null;
         navigate("/dashboard");
+        window.location.reload();
       } else {
         alert(`Error: ${data.message}`);
       }

@@ -67,7 +67,7 @@ const StudentsDetails = () => {
     }
 
     try {
-      const response = await fetch(`${baseUrl}/students/pay/${student._id}`, {
+      const response = await fetch(`${baseUrl}students/pay/${student._id}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ studentId: student._id, amountPaid: Number(paymentAmount), feeType: creditFeeType }),
