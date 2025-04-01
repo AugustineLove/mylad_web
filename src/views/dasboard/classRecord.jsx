@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useLocation } from "react-router";
 import { useSchool } from "../../context/schoolContext";
 import { NavLink } from "react-router";
+import { baseUrl } from "../../constants/helpers";
 
 const ClassRecord = () => {
   const [classes, setClasses] = useState([]);
@@ -16,7 +17,7 @@ const ClassRecord = () => {
   useEffect(() => {
     const fetchClasses = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/api/classes/${school._id}`);
+        const response = await fetch(`${baseUrl}classes/${school._id}`);
         if (!response.ok) throw new Error("Failed to fetch classes");
 
         const data = await response.json();

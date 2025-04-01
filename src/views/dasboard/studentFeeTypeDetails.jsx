@@ -4,6 +4,7 @@ import TransactionTable from "../../components/dashboard/transactionTable";
 import jsPDF from "jspdf";
 import { autoTable } from "jspdf-autotable";
 import { useSchool } from "../../context/schoolContext";
+import { baseUrl } from "../../constants/helpers";
 
 const StudentFeeTypeDetails = () => {
   const location = useLocation();
@@ -24,7 +25,7 @@ const StudentFeeTypeDetails = () => {
 
       try {
         setLoading(true);
-        const response = await fetch(`http://localhost:3000/api/transactions/${student._id}?feeType=${feeType}`);
+        const response = await fetch(`${baseUrl}transactions/${student._id}?feeType=${feeType}`);
         const data = await response.json();
         setTransactions(data);
 

@@ -1,0 +1,1 @@
+export const baseUrl = 'https://mylad-backend.onrender.com/api/'

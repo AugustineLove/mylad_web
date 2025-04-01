@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useSchool } from "../../context/schoolContext";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
+import { baseUrl } from "../../constants/helpers";
 
 const ReportPage = () => {
     const { school } = useSchool();
@@ -21,7 +22,7 @@ const ReportPage = () => {
 
     useEffect(() => {
         if (schoolId) {
-            fetchData(`http://localhost:3000/api/classes/${schoolId}`, setClasses, "Failed to fetch classes.");
+            fetchData(`${baseUrl}classes/${schoolId}`, setClasses, "Failed to fetch classes.");
         }
     }, [schoolId]);
 
@@ -59,7 +60,7 @@ const ReportPage = () => {
         });
 
         try {
-            const res = await fetch(`http://localhost:3000/api/transactions/trans/filterTransaction?${queryParams.toString()}`, {
+            const res = await fetch(`${baseUrl}transactions/trans/filterTransaction?${queryParams.toString()}`, {
                 method: "GET",
                 headers: { "Content-Type": "application/json" },
             });

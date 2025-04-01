@@ -4,6 +4,7 @@ import AppButton from "../../components/button";
 import StudentTable from "../../components/dashboard/studentsTable";
 import { useStudents } from "../../context/studentsContext";
 import { useSchool } from "../../context/schoolContext";
+import { baseUrl } from "../../constants/helpers";
 
 const feeOptions = ["School Fees", "Admission Fees", "PTA Fees", "Exam Fees", "Others"];
 
@@ -40,7 +41,7 @@ const AddClassFeePage = () => {
   }
   
     try {
-      const response = await fetch(`http://localhost:3000/api/students/addClassFees/${schoolId}`, {
+      const response = await fetch(`${baseUrl}/students/addClassFees/${schoolId}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

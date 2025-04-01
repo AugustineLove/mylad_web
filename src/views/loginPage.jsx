@@ -3,6 +3,7 @@ import { useNavigate } from "react-router";
 import AppButton from "../components/button";
 import NavBar from "../components/navBar";
 import { useSchool } from "../context/schoolContext";
+import { baseUrl } from "../constants/helpers";
 
 const Login = () => {
   const [isSignUp, setIsSignUp] = useState(false);
@@ -30,8 +31,8 @@ const Login = () => {
 
     try {
       const url = isSignUp
-        ? "http://localhost:3000/api/schools/add"
-        : "http://localhost:3000/api/schools/login";
+        ? `${baseUrl}schools/add`
+        : `${baseUrl}schools/login`;
 
       const response = await fetch(url, {
         method: "POST",

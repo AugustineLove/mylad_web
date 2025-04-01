@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import AppButton from '../../components/button';
 import { NavLink, useLocation } from 'react-router';
 import { useSchool } from '../../context/schoolContext';
+import { baseUrl } from '../../constants/helpers';
 
 const StudentsDetails = () => {
   const location = useLocation();
@@ -25,7 +26,7 @@ const StudentsDetails = () => {
 
   const sendMessageToParent = async (messageTo, price, parentName, studentName, feeType) => {
     try {
-      const response = await fetch('http://localhost:3000/api/parents/sendMessage', {
+      const response = await fetch(`${baseUrl}parents/sendMessage`, {
         method: 'POST',
         headers: {
           "Content-Type": "application/json"
@@ -47,7 +48,7 @@ const StudentsDetails = () => {
 
   const addTransaction = async (studentId, schoolId, amount, feeType, date, transactionType) => {
     try {
-      const response = await fetch(`http://localhost:3000/api/transactions/${student._id}`, {
+      const response = await fetch(`${baseUrl}transactions/${student._id}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ studentId, schoolId, amount, feeType, date, transactionType }),
@@ -66,7 +67,7 @@ const StudentsDetails = () => {
     }
 
     try {
-      const response = await fetch(`http://localhost:3000/api/students/pay/${student._id}`, {
+      const response = await fetch(`${baseUrl}/students/pay/${student._id}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ studentId: student._id, amountPaid: Number(paymentAmount), feeType: creditFeeType }),
@@ -94,7 +95,7 @@ const StudentsDetails = () => {
     }
 
     try {
-      const response = await fetch(`http://localhost:3000/api/students/debit/${student._id}`, {
+      const response = await fetch(`${baseUrl}students/debit/${student._id}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ studentId: student._id, amount: Number(debitAmount), feeType: debitFeeType }),

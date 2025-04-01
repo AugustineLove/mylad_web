@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "react-router";
 import autoTable from "jspdf-autotable";
 import jsPDF from "jspdf";
 import { useSchool } from "../../context/schoolContext";
+import { baseUrl } from "../../constants/helpers";
 
 const ClassFees = () => {
   const [students, setStudents] = useState([]);
@@ -25,7 +26,7 @@ const ClassFees = () => {
   useEffect(() => {
     const fetchStudents = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/api/classes/${classId}/students`);
+        const response = await fetch(`${baseUrl}classes/${classId}/students`);
         if (!response.ok) throw new Error("Failed to fetch students");
         const data = await response.json();
         setStudents(data);
@@ -38,7 +39,7 @@ const ClassFees = () => {
 
     const fetchFixedAmount = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/api/classes/${classId}/${feeType}`);
+        const response = await fetch(`${baseUrl}classes/${classId}/${feeType}`);
         if (!response.ok) throw new Error("Failed to fetch fixed fee amount");
         const data = await response.json();
         setFixedAmount(data.amount);
@@ -53,7 +54,7 @@ const ClassFees = () => {
 
   const updateFixedAmount = async () => {
     try {
-      const response = await fetch(`http://localhost:3000/api/classes/${classId}/${feeType}`, {
+      const response = await fetch(`${baseUrl}classes/${classId}/${feeType}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ classId, feeType, amount: fixedAmount, dueDate }),

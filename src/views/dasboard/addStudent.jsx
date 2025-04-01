@@ -4,6 +4,7 @@ import { useSchool } from "../../context/schoolContext";
 import { useNavigate } from "react-router";
 import { useStudents } from "../../context/studentsContext";
 import { UserCard } from "../../assets";
+import { baseUrl } from "../../constants/helpers";
 
 const AddStudent = () => {
   const { school } = useSchool();
@@ -35,7 +36,7 @@ const AddStudent = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch("http://localhost:3000/api/students/add", {
+      const response = await fetch(`${baseUrl}students/add`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

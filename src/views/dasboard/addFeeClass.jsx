@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { NavLink } from "react-router"; // Ensure correct import
 import { useSchool } from "../../context/schoolContext";
 import AppButton from "../../components/button";
+import { baseUrl } from "../../constants/helpers";
 
 const AddFeesPage = () => {
   const { school } = useSchool();
@@ -18,7 +19,7 @@ const AddFeesPage = () => {
     if (!feeType) return;
 
     try {
-      const response = await fetch(`http://localhost:3000/api/schools/${school._id}/addFeeType`, {
+      const response = await fetch(`${baseUrl}/schools/${school._id}/addFeeType`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ schoolId: school._id, feeType: feeType, amount: 0 }),

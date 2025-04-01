@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
+import { baseUrl } from "../../constants/helpers";
 
 const ClassDetails = () => {
   const [students, setStudents] = useState([]);
@@ -18,7 +19,7 @@ const ClassDetails = () => {
   useEffect(() => {
     const fetchStudents = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/api/classes/${classId}/students`);
+        const response = await fetch(`${baseUrl}classes/${classId}/students`);
         if (!response.ok) throw new Error("Failed to fetch students");
 
         const data = await response.json();
@@ -57,7 +58,7 @@ const ClassDetails = () => {
     if (selectedStudents.length === 0) return alert("No students selected for promotion.");
     setPromoting(true);
     try {
-      const response = await fetch(`http://localhost:3000/api/classes/promote`, {
+      const response = await fetch(`${baseUrl}classes/promote`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ classId, students: selectedStudents }),
@@ -78,7 +79,7 @@ const ClassDetails = () => {
     setDeleting(true);
     try {
       console.log("Deleting student IDs: ", selectedStudents); // Debugging log
-      const response = await fetch(`http://localhost:3000/api/students/deletion/students`, {
+      const response = await fetch(`${baseUrl}students/deletion/students`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ studentIds: selectedStudents }),

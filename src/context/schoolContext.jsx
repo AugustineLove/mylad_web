@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import { toast } from "react-toastify";
+import { baseUrl } from "../constants/helpers";
 
 const SchoolContext = createContext();
 
@@ -14,6 +15,8 @@ export const SchoolProvider = ({ children }) => {
       setLoading(true);
       const response = await fetch(`http://localhost:3000/api/schools/${schoolId}`);
       const data = await response.json();
+
+      console.log(`Schools data: ${data._id}`)
 
       if (response.ok) {
         setSchool(data);
@@ -34,7 +37,7 @@ export const SchoolProvider = ({ children }) => {
     if (!school) return;
     try {
       setLoading(true);
-      const response = await fetch("http://localhost:3000/api/schools/edit", {
+      const response = await fetch(`${baseUrl}schools/edit`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
