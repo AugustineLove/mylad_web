@@ -16,6 +16,10 @@ import SelectedFees from "./views/dasboard/selectedFees.jsx";
 import ClassFees from "./views/dasboard/classFee.jsx";
 import StudentFeeTypeDetails from "./views/dasboard/studentFeeTypeDetails.jsx";
 import ReportPage from "./views/dasboard/generalReport.jsx";
+import ClassRecord from "./views/dasboard/classRecord.jsx";
+import ClassDetails from "./views/dasboard/classDetails.jsx";
+import EditSchoolDetails from "./views/dasboard/editSchoolDetails.jsx";
+import EditStudentDetails from "./views/dasboard/editStudentDetails.jsx";
 
 const root = document.getElementById("root");
 
@@ -31,7 +35,10 @@ ReactDOM.createRoot(root).render(
         <Route index element={<DashboardHome/>} /> 
           <Route index element={<DashboardHome/>} /> 
           <Route path="addFees" element={<AddFeesPage/>} />
+          <Route path="editSchool" element={<EditSchoolDetails/>} />
           <Route path="generalReport" element={<ReportPage/>} />
+          <Route path="classRecord" element={<ClassRecord/>} />
+          <Route path="classRecord/classDetails" element={<ClassDetails/>} />
           <Route path="addFees/addClassFee" element={<AddClassFeePage/>} />
           <Route path="addFees/selectedFees" element={<SelectedFees/>} />
           <Route path="addFees/selectedFees/classFee" element={<ClassFees/>} />
@@ -39,6 +46,7 @@ ReactDOM.createRoot(root).render(
           <Route path="addStudent" element={<AddStudent/>} />
           <Route path="addFees/addClassFee/studentDetails" element={<StudentsDetails/>} />
           <Route path="studentDetails" element={<StudentsDetails/>} />
+          <Route path="studentDetails/editStudentDetails" element={<EditStudentDetails/>} />
         
         </Route>
 </Route>

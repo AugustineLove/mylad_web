@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSchool } from "../../context/schoolContext";
 import jsPDF from "jspdf";
-import autoTable from "jspdf-autotable"; "jspdf-autotable";
+import autoTable from "jspdf-autotable";
 
 const ReportPage = () => {
     const { school } = useSchool();
@@ -12,11 +12,12 @@ const ReportPage = () => {
     const [feeTypes, setFeeTypes] = useState([]);
     const [selectedClass, setSelectedClass] = useState("all");
     const [selectedFeeType, setSelectedFeeType] = useState("all");
-    
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
+    const [currentPage, setCurrentPage] = useState(1);
+    const transactionsPerPage = 20;
 
     useEffect(() => {
         if (schoolId) {
@@ -31,7 +32,7 @@ const ReportPage = () => {
             const data = await res.json();
             setState(data || []);
             if (school) {
-                setFeeTypes([ ...school.feeTypes.map((fee) => fee.feeType)]);
+                setFeeTypes([...school.feeTypes.map((fee) => fee.feeType)]);
             }
         } catch (err) {
             setError(errorMessage);
@@ -51,6 +52,8 @@ const ReportPage = () => {
             schoolId,
             startDate,
             endDate,
+            page: currentPage,
+            limit: transactionsPerPage,
             ...(selectedClass !== "all" && { selectedClass }),
             ...(selectedFeeType !== "all" && { feeType: selectedFeeType }),
         });
@@ -74,7 +77,7 @@ const ReportPage = () => {
     const downloadPDF = () => {
         const doc = new jsPDF();
         doc.text("Transaction Report", 10, 10);
-        
+
         const tableColumn = ["Student Name", "Student Class", "Fee Type", "Transaction Type", "Amount", "Date"];
         const tableRows = transactions.map(txn => [
             txn.studentName || "N/A",
@@ -89,72 +92,113 @@ const ReportPage = () => {
         doc.save("transaction_report.pdf");
     };
 
+    // Calculate total amount
+    const totalAmount = transactions.reduce((total, txn) => total + parseFloat(txn.amount || 0), 0).toFixed(2);
+
     return (
-        <div className="p-6 space-y-6">
-            <h2 className="text-xl font-bold">Transactions Report</h2>
+        <div className="p-6 space-y-6 bg-gradient-to-r from-blue-100 to-blue-100 rounded-lg shadow-lg">
+            <h2 className="text-2xl font-semibold text-center text-indigo-800">Transactions Report</h2>
 
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <select 
-                    value={selectedClass} 
-                    onChange={(e) => setSelectedClass(e.target.value)}
-                    className="border p-2 rounded w-full"
-                >
-                    <option value="all">All Classes</option>
-                    {classes.map((cls) => (
-                        <option key={cls._id} value={cls.className}>
-                            {cls.className}
-                        </option>
-                    ))}
-                </select>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+                <div className="flex flex-col space-y-2">
+                    <label className="text-gray-700 font-medium">Select Class</label>
+                    <select
+                        value={selectedClass}
+                        onChange={(e) => setSelectedClass(e.target.value)}
+                        className="border p-3 rounded-lg text-gray-700 focus:ring-2 focus:ring-indigo-400"
+                    >
+                        <option value="all">All Classes</option>
+                        {classes.map((cls) => (
+                            <option key={cls._id} value={cls.className}>{cls.className}</option>
+                        ))}
+                    </select>
+                </div>
 
-                <select 
-                    value={selectedFeeType} 
-                    onChange={(e) => setSelectedFeeType(e.target.value)}
-                    className="border p-2 rounded w-full"
-                >
-                    <option value="all">All Fee Types</option>
-                    {feeTypes.map((feeType, index) => (
-                        <option key={index} value={feeType}>
-                            {feeType}
-                        </option>
-                    ))}
-                </select>
+                <div className="flex flex-col space-y-2">
+                    <label className="text-gray-700 font-medium">Select Fee Type</label>
+                    <select
+                        value={selectedFeeType}
+                        onChange={(e) => setSelectedFeeType(e.target.value)}
+                        className="border p-3 rounded-lg text-gray-700 focus:ring-2 focus:ring-indigo-400"
+                    >
+                        <option value="all">All Fee Types</option>
+                        {feeTypes.map((feeType, index) => (
+                            <option key={index} value={feeType}>{feeType}</option>
+                        ))}
+                    </select>
+                </div>
 
-                <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className="border p-2 rounded w-full" />
-                <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className="border p-2 rounded w-full" />
+                <div className="flex flex-col space-y-2">
+                    <label className="text-gray-700 font-medium">Start Date</label>
+                    <input
+                        type="date"
+                        value={startDate}
+                        onChange={(e) => setStartDate(e.target.value)}
+                        className="border p-3 rounded-lg text-gray-700 focus:ring-2 focus:ring-indigo-400"
+                    />
+                </div>
+
+                <div className="flex flex-col space-y-2">
+                    <label className="text-gray-700 font-medium">End Date</label>
+                    <input
+                        type="date"
+                        value={endDate}
+                        onChange={(e) => setEndDate(e.target.value)}
+                        className="border p-3 rounded-lg text-gray-700 focus:ring-2 focus:ring-indigo-400"
+                    />
+                </div>
             </div>
 
-            <button onClick={fetchTransactions} className="mt-4 bg-blue-500 text-white px-4 py-2 rounded">Generate Report</button>
-            {transactions.length > 0 && <button onClick={downloadPDF} className="mt-4 ml-4 bg-[#0d330cdd] text-white px-4 py-2 rounded">Download as PDF</button>}
+            <div className="flex justify-center space-x-4">
+                <button
+                    onClick={fetchTransactions}
+                    className="mt-4 bg-indigo-500 text-white px-6 py-2 rounded-lg hover:bg-indigo-600 transition duration-300"
+                >
+                    Generate Report
+                </button>
+                {transactions.length > 0 && (
+                    <button
+                        onClick={downloadPDF}
+                        className="mt-4 bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600 transition duration-300"
+                    >
+                        Download as PDF
+                    </button>
+                )}
+            </div>
 
-            {loading && <p className="text-center mt-4">Loading...</p>}
+            {loading && <p className="text-center mt-4 text-gray-700">Loading...</p>}
             {error && <p className="text-center text-red-500 mt-4">{error}</p>}
 
             {transactions.length > 0 && (
-                <div className="bg-white shadow-md rounded-lg p-6">
-                    <h3 className="text-lg font-semibold mb-4">Transaction Report</h3>
-                    <table className="w-full border-collapse border border-gray-300">
+                <div className="overflow-x-auto bg-white shadow-md rounded-lg p-6 mt-6">
+                    <h3 className="text-xl font-semibold mb-4">Transaction Details</h3>
+                    <table className="min-w-full border-collapse border border-gray-300">
                         <thead>
-                            <tr className="bg-gray-200">
-                                <th className="border p-2">Student Name</th>
-                                <th className="border p-2">Student Class</th>
-                                <th className="border p-2">Fee Type</th>
-                                <th className="border p-2">Transaction Type</th>
-                                <th className="border p-2">Amount</th>
-                                <th className="border p-2">Date</th>
+                            <tr className="bg-indigo-200">
+                                <th className="border p-3">Student Name</th>
+                                <th className="border p-3">Student Class</th>
+                                <th className="border p-3">Fee Type</th>
+                                <th className="border p-3">Transaction Type</th>
+                                <th className="border p-3">Amount</th>
+                                <th className="border p-3">Date</th>
                             </tr>
                         </thead>
                         <tbody>
                             {transactions.map((txn) => (
-                                <tr key={txn._id} className="border">
-                                    <td className="border p-2">{txn.studentName || "N/A"}</td>
-                                    <td className="border p-2">{txn.className || "Unknown"}</td>
-                                    <td className="border p-2">{txn.feeType}</td>
-                                    <td className="border p-2">{txn.transactionType}</td>
-                                    <td className="border p-2">{txn.amount}</td>
-                                    <td className="border p-2">{new Date(txn.date).toLocaleDateString()}</td>
+                                <tr key={txn._id} className="hover:bg-gray-100">
+                                    <td className="border p-3">{txn.studentName || "N/A"}</td>
+                                    <td className="border p-3">{txn.className || "Unknown"}</td>
+                                    <td className="border p-3">{txn.feeType}</td>
+                                    <td className="border p-3">{txn.transactionType}</td>
+                                    <td className="border p-3">{txn.amount}.00</td>
+                                    <td className="border p-3">{new Date(txn.date).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}</td>
                                 </tr>
                             ))}
+                            {/* Row for total amount */}
+                            <tr className="bg-indigo-100">
+                                <td colSpan="4" className="border p-3 text-right font-semibold">Total Amount</td>
+                                <td colSpan="2" className="border p-3">{totalAmount}</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>

@@ -3,7 +3,7 @@ import { useLocation } from "react-router";
 import { useSchool } from "../../context/schoolContext";
 import { NavLink } from "react-router";
 
-const SelectedFees = () => {
+const ClassRecord = () => {
   const [classes, setClasses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -41,9 +41,9 @@ const SelectedFees = () => {
         {classes.map((classItem) => (
           <NavLink 
             key={classItem._id} 
-            to={`classFee?type=${encodeURIComponent(feeType)}&class=${encodeURIComponent(classItem.className)}&classId=${encodeURIComponent(classItem._id)}`}
+            to={`classDetails?type=${encodeURIComponent(feeType)}&class=${encodeURIComponent(classItem.className)}&classId=${encodeURIComponent(classItem._id)}`}
           >
-           <div className="p-6 bg-gradient-to-r from-indigo-500 to-indigo-300 rounded-lg shadow-xl hover:scale-105 transform transition-all duration-300 cursor-pointer text-center text-white font-semibold text-lg">
+            <div className="p-6 bg-gradient-to-r from-indigo-500 to-indigo-300 rounded-lg shadow-xl hover:scale-105 transform transition-all duration-300 cursor-pointer text-center text-white font-semibold text-lg">
               {classItem.className}
             </div>
           </NavLink>
@@ -53,4 +53,4 @@ const SelectedFees = () => {
   );
 };
 
-export default SelectedFees;
+export default ClassRecord;

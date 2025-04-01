@@ -5,47 +5,36 @@ import { useStudents } from "../../context/studentsContext";
 
 const DashboardHome = () => {
   const { students, loading } = useStudents();
-  /* const listofFees = [
-    { name: "School Fees", path: "/addSchoolFees", color: "#083C5D" },
-    { name: "Admission Fees", path: "/addAdmissionFees", color: "#FFBB39" },
-    { name: "PTA Fees", path: "/addPTAFees", color: "#083C5D" },
-    { name: "Exam Fees", path: "/addExamFees", color: "#FFBB39" },
-    { name: "Sports Fees", path: "/addSportsFees", color: "#083C5D" },
-  ]; */
 
   return (
-    <>
-      <div className="flex space-x-1">
-        <div className="flex justify-center items-center bg-gray-200 border border-gray-400 w-[150px] rounded-2xl p-[10px] text-black">
-          <NavLink to={`addFees`}>All Fees</NavLink>
-        </div>
-        <div className="flex justify-center items-center bg-gray-200 border border-gray-400 w-[150px] rounded-2xl p-[10px] text-black">
-          <NavLink to={`addStudent`}>Add Student</NavLink>
-        </div>
-        <div className="flex justify-center items-center bg-gray-200 border border-gray-400 w-[170px] rounded-2xl p-[10px] text-black">
-          <NavLink to={`generalReport`}>Generate Report</NavLink>
-        </div>
-       
-      </div>
-
-      {/* <div className="mt-[50px] flex space-x-[50px] justify-center items-center">
-        {listofFees.map((list) => (
-          <NavLink key={list.name} to={`addFees?type=${encodeURIComponent(list.name)}`}>
-            <FeeCatCard label={list.name} bgColor={list.color} />
+    <div className="p-6 bg-gray-100 min-h-screen">
+      {/* Navigation Buttons */}
+      <div className="flex space-x-4 justify-center mb-6">
+        {[
+          { label: "All Fees", path: "addFees" },
+          { label: "Class Records", path: "classRecord" },
+          { label: "Add Student", path: "addStudent" },
+          { label: "Generate Report", path: "generalReport" },
+        ].map((item) => (
+          <NavLink key={item.label} to={item.path}>
+            <div className="px-6 py-3 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-200 transition duration-300 text-gray-800 text-lg font-medium">
+              {item.label}
+            </div>
           </NavLink>
         ))}
-      </div> */}
+      </div>
 
-      <div className="mt-[20px]">
+      {/* Student Table */}
+      <div className="mt-8 bg-white p-6 rounded-lg shadow-md">
         {loading ? (
-          <p>Loading students...</p>
+          <p className="text-gray-500 text-center">Loading students...</p>
         ) : students && students.length > 0 ? (
           <StudentTable studentsData={students} />
         ) : (
-          <p>No students found.</p>
+          <p className="text-gray-500 text-center">No students found.</p>
         )}
       </div>
-    </>
+    </div>
   );
 };
 
