@@ -17,7 +17,7 @@ const AboutPhoneCard = ({ description, title }) => {
         className="w-20 h-20 rounded-xl overflow-hidden shadow-md"
         whileHover={{ scale: 1.05 }}
       >
-        <img src="src/assets/youngboy.png" alt="An image" className="object-cover w-full h-full" />
+        <img src="youngboy.png" alt="An image" className="object-cover w-full h-full" />
       </motion.div>
     </motion.div>
   );

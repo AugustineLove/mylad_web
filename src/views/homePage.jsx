@@ -56,7 +56,7 @@ const HomePage = () => {
   >
     <img 
       className='object-cover w-full h-full absolute top-0 left-0' 
-      src='src/assets/student.avif' 
+      src='student.avif' 
       alt='Students'
     />
     {/* Optional Overlay for a More Modern Look */}
@@ -216,14 +216,14 @@ const HomePage = () => {
     {/* Phone image */}
     <motion.img 
       className='absolute w-[100%] lg:w-[70%] object-cover bottom-[-350px] left-0 rounded-xl z-10' 
-      src='src/assets/phone.png' 
+      src='phone.png' 
       alt='Mobile App' 
       whileHover={{ scale: 1.05 }}
     />
     {/* Overlay Image (Choose School) */}
     <motion.img 
       className='absolute right-10 bottom-[-350px] lg:right-24 w-20 lg:w-[70%] z-1' 
-      src='src/assets/chooseschool.png' 
+      src='chooseschool.png' 
       alt='Choose School' 
       initial={{ opacity: 0, scale: 0.8 }} 
       animate={{ opacity: 1, scale: 1, transition: { duration: 0.5 } }}
