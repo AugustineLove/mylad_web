@@ -7,5 +7,6 @@ export default defineConfig({
   plugins: [react(), tailwindcss(),],
   server: {
     allowedHosts: ['myward.onrender.com'],
+    historyApiFallback: true,
   },
 })
