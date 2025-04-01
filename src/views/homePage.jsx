@@ -32,7 +32,7 @@ const HomePage = () => {
     <section className='px-20 py-16 bg-gradient-to-b from-white to-gray-100'>
    {/* Hero Section */}
 <motion.div 
-  className='relative flex items-center justify-between px-6 py-16 lg:py-32 lg:px-24 bg-gradient-to-r from-[#0254c0] via-[#2d098d] to-[#0a116e] text-white'
+  className='relative flex items-center justify-between px-6 py-16 lg:py-32 lg:px-24 bg-gradient-to-r from-[#020599] via-[#020599] to-[#020599] text-white'
 
   initial='hidden' 
   animate='visible' 

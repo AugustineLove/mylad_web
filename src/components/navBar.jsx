@@ -13,7 +13,7 @@ const NavBar = () => {
       transition={{ duration: 0.5 }}
     >
       {/* Logo */}
-      <div className="text-2xl font-bold tracking-wide text-blue-900">AppName</div>
+      <div className="text-2xl font-bold tracking-wide text-blue-900">MyWard</div>
 
       {/* Navigation Links */}
       <div className="flex items-center space-x-8">
