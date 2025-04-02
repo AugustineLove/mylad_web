@@ -20,6 +20,7 @@ import ClassRecord from "./views/dasboard/classRecord.jsx";
 import ClassDetails from "./views/dasboard/classDetails.jsx";
 import EditSchoolDetails from "./views/dasboard/editSchoolDetails.jsx";
 import EditStudentDetails from "./views/dasboard/editStudentDetails.jsx";
+import AboutUs from "./views/aboutPage.jsx";
 
 const root = document.getElementById("root");
 
@@ -31,6 +32,7 @@ ReactDOM.createRoot(root).render(
     <Route path='/' element={<App/>}>
     <Route index element={<HomePage />} />
         <Route path='login' element={<Login />} />
+        <Route path='about' element={<AboutUs />} />
         <Route path="dashboard" element={<Dashboard />}>
         <Route index element={<DashboardHome/>} /> 
           <Route index element={<DashboardHome/>} /> 
