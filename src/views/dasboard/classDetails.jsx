@@ -58,6 +58,7 @@ const ClassDetails = () => {
     if (selectedStudents.length === 0) return alert("No students selected for promotion.");
     setPromoting(true);
     try {
+      console.log(`Selected students: ${selectedStudents}`)
       const response = await fetch(`${baseUrl}classes/promote`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },

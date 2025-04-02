@@ -7,13 +7,18 @@ import { motion } from 'framer-motion';
 const NavBar = () => {
   return (
     <motion.nav 
-      className="bg-white shadow-lg flex items-center justify-between h-[80px] text-gray-900 fixed w-full z-50 px-10 border-b border-gray-200 mb-10"
+      className="bg-white shadow-lg flex items-center justify-between h-[120px] text-gray-900 fixed w-full z-50 px-10 border-b border-gray-200"
       initial={{ y: -100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.5 }}
     >
       {/* Logo */}
-      <div className="text-2xl font-bold tracking-wide text-blue-900">MyWard</div>
+      <div className="text-2xl font-bold tracking-wide">
+         <img 
+          src='Asset 2.png'
+          className='w-36 h-14 mb-1'
+         />
+      </div>
 
       {/* Navigation Links */}
       <div className="flex items-center space-x-8">

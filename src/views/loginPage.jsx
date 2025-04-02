@@ -73,17 +73,22 @@ const Login = () => {
     <>
       <NavBar />
       <section
-        className="min-h-screen flex items-center justify-center bg-gradient-to-r from-indigo-500 to-purple-600 p-8"
+        className="min-h-screen flex items-center justify-center bg-gradient-to-r from-indigo-500 to-blue-600 p-8"
         style={{
           backgroundImage:
-            "url('https://png.pngtree.com/thumb_back/fh260/background/20241024/pngtree-ai-technology-education-background-with-circuit-board-and-graduation-hat-on-image_16447498.jpg')",
+            "src//login.jpg",
           backgroundSize: "cover",
         }}
       >
         <div className="absolute inset-0 bg-black opacity-40"></div>
 
         <div className="relative z-10 bg-white p-10 rounded-xl shadow-lg max-w-lg w-full">
-          <h1 className="text-4xl font-semibold text-center text-indigo-800 mb-4">AppName</h1>
+          <div className="flex m-auto w-full justify-center items-center mb-5">
+          <img 
+            src='Asset 2.png'
+            className='w-36 h-14 mb-1'
+          />
+        </div>
           <h2 className="text-2xl text-center text-gray-700 mb-2">
             {isSignUp ? "Create an Account" : "Sign in to Manage!"}
           </h2>

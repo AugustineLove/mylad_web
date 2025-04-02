@@ -8,7 +8,7 @@ const AppFooter = () => {
         
         {/* App Info Section */}
         <div className="flex flex-col space-y-4">
-          <h1 className="text-4xl font-extrabold text-white">AppName</h1>
+          <h1 className="text-4xl font-extrabold text-white">My Ward</h1>
           <p className="text-lg text-gray-300">
             A platform designed to streamline school management. Empowering educators, students, and parents with seamless tools and communication.
           </p>

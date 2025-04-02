@@ -26,7 +26,7 @@ const DashboardNav = () => {
   return (
     <>
       {/* Fixed Navbar with Glassmorphism */}
-      <div className="fixed top-0 left-0 w-full bg-[#031c27] bg-opacity-90 backdrop-blur-md shadow-lg flex justify-between items-center py-4 px-[80px] text-white z-50 rounded-b-lg border-b border-gray-600">
+      <div className="fixed top-0 left-0 w-full bg-[#0b2f3f] bg-opacity-90 backdrop-blur-md shadow-lg flex justify-between items-center py-4 px-[80px] text-white z-50 rounded-b-lg border-b border-gray-600">
         
         {/* Date & Time */}
         <div className="text-lg font-semibold">

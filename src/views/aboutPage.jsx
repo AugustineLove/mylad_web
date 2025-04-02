@@ -18,9 +18,9 @@ const AboutUs = () => {
             </div>
             <div className='flex flex-col w-70'>
                 <div className='h-90 w-70 bg-[#e7e7e7] rounded-[10px] '>
-                    <img src='bAustin.jpg' className='object-cover rounded-[10px] h-full w-full'/>
+                    <img src='bOscar.jpg' className='object-cover rounded-[10px] h-full w-full'/>
                 </div>
-                <h1 className='text-[20px] text-[#0B0047FF] font-bold'>Augustine Stephens</h1>
+                <h1 className='text-[20px] text-[#0B0047FF] font-bold'>Oscar Stephens</h1>
                 <h1 className='text-[15px]'>Lead Tech Engineer</h1>
                 <p className='text-[14px] font-light'>It is a long established fact that a reader will be distracted.</p>
             </div>
@@ -28,7 +28,7 @@ const AboutUs = () => {
                 <div className='h-90 w-70 bg-[#e7e7e7] rounded-[10px] '>
                     <img src='bAustin.jpg' className='object-cover rounded-[10px] h-full w-full'/>
                 </div>
-                <h1 className='text-[20px] text-[#0B0047FF] font-bold'>Oscar Stephens</h1>
+                <h1 className='text-[20px] text-[#0B0047FF] font-bold'>Augustine Stephens</h1>
                 <h1 className='text-[15px]'>Lead Tech Engineer</h1>
                 <p className='text-[14px] font-light'>It is a long established fact that a reader will be distracted.</p>
             </div>

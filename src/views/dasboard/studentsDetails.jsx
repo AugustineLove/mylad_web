@@ -67,13 +67,14 @@ const StudentsDetails = () => {
     }
 
     try {
-      const response = await fetch(`${baseUrl}students/pay/${student._id}`, {
+      const response = await fetch(`http://localhost/api/students/pay/${student._id}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ studentId: student._id, amountPaid: Number(paymentAmount), feeType: creditFeeType }),
       });
 
       if (response.ok) {
+        console.log('Paying.................')
         addTransaction(student._id, school._id, Number(paymentAmount), creditFeeType, dueDate, "Credit");
         sendMessageToParent(student.studentParentNumber, Number(paymentAmount), student.studentParentSurname, student.studentFirstName, creditFeeType);
         alert(`Successfully credited GH₵${paymentAmount} to ${creditFeeType}.`);
