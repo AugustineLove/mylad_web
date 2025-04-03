@@ -75,8 +75,7 @@ const Login = () => {
       <section
         className="min-h-screen flex items-center justify-center bg-gradient-to-r from-indigo-500 to-blue-600 p-8"
         style={{
-          backgroundImage:
-            "src//login.jpg",
+          backgroundImage: "url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT3ckAA6QKMknezCq5R4xUp2s-nxA944Ev27A&s')",
           backgroundSize: "cover",
         }}
       >
