@@ -13,12 +13,12 @@ const HomePage = () => {
     const features = [
         {
           title: 'Easy School Management',
-          description: 'Manage students, classes, and school data from anywhere with our easy-to-use app interface.',
+          description: "Manage students' fees, class fees, and school data from anywhere with our easy-to-use app interface.",
           imgSrc: 'src/assets/school_management.png', // Replace with actual image path
         },
         {
           title: 'Real-Time Notifications',
-          description: 'Receive real-time notifications for updates on grades, schedules, and school events.',
+          description: 'Receive real-time notifications for updates on fees payments, schedules, and school events.',
           imgSrc: 'src/assets/notifications.png', // Replace with actual image path
         },
         {
@@ -110,7 +110,7 @@ const HomePage = () => {
     <div className='p-8 bg-white shadow-xl rounded-2xl transform hover:scale-105 transition duration-300'>
       <h2 className='text-2xl font-semibold text-blue-800'>Smart Reports & Analytics</h2>
       <p className='text-gray-600 mt-3 leading-relaxed'>
-        Gain deep insights into student performance, attendance, and financials with powerful analytics that help administrators make informed decisions.
+        Gain deep insights into students records, and financials with real-time report analytics that help administrators make informed decisions.
       </p>
     </div>
 
