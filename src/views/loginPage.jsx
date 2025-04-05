@@ -28,11 +28,12 @@ const Login = () => {
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log('Starting.....')
 
     try {
       const url = isSignUp
         ? `${baseUrl}schools/add`
-        : `${baseUrl}schools/login`;
+        : `http://localhost:5050/api/schools/login`;
 
       const response = await fetch(url, {
         method: "POST",
@@ -49,19 +50,29 @@ const Login = () => {
         }),
       });
 
-      const data = await response.json();
+      const schoolData = await response.json();
+      console.log(schoolData);
 
       if (response.ok) {
-        localStorage.setItem("authToken", data.authToken);
-        localStorage.setItem("schoolId", data.schoolId);
-        localStorage.setItem("schoolName", data.schoolName);
-        alert(isSignUp ? "School created successfully!" : "Login successful!");
-        updateSchool(data.schoolId);
-        isSignUp ? window.location.reload() : null;
-        navigate("/dashboard");
-        window.location.reload();
+        localStorage.setItem("authToken", schoolData.authToken);
+        localStorage.setItem("schoolId", schoolData.schoolId);
+        localStorage.setItem("schoolName", schoolData.schoolName);
+        /* alert(isSignUp ? "School created successfully!" : "Login successful!");
+        updateSchool(data.schoolId); */
+        if (isSignUp) {
+          // Send data to subscription page
+          navigate("/subscribe", {
+            state: {
+              schoolData
+            },
+          });
+        } else {
+          navigate("/dashboard");
+          window.location.reload();
+        }
+        
       } else {
-        alert(`Error: ${data.message}`);
+        alert(`Error: ${schoolData.message}`);
       }
     } catch (error) {
       console.error("Error:", error);

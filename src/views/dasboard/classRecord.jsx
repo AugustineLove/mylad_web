@@ -17,7 +17,7 @@ const ClassRecord = () => {
   useEffect(() => {
     const fetchClasses = async () => {
       try {
-        const response = await fetch(`${baseUrl}classes/${school._id}`);
+        const response = await fetch(`http://localhost:5050/api/classes/${school.id}`);
         if (!response.ok) throw new Error("Failed to fetch classes");
 
         const data = await response.json();
@@ -41,11 +41,11 @@ const ClassRecord = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
         {classes.map((classItem) => (
           <NavLink 
-            key={classItem._id} 
-            to={`classDetails?type=${encodeURIComponent(feeType)}&class=${encodeURIComponent(classItem.className)}&classId=${encodeURIComponent(classItem._id)}`}
+            key={classItem.id} 
+            to={`classDetails?type=${encodeURIComponent(feeType)}&class=${encodeURIComponent(classItem.class_name)}&classId=${encodeURIComponent(classItem.id)}`}
           >
             <div className="p-6 bg-gradient-to-r from-indigo-500 to-indigo-300 rounded-lg shadow-xl hover:scale-105 transform transition-all duration-300 cursor-pointer text-center text-white font-semibold text-lg">
-              {classItem.className}
+              {classItem.class_name}
             </div>
           </NavLink>
         ))}

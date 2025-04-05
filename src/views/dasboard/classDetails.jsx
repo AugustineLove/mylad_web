@@ -19,7 +19,7 @@ const ClassDetails = () => {
   useEffect(() => {
     const fetchStudents = async () => {
       try {
-        const response = await fetch(`${baseUrl}classes/${classId}/students`);
+        const response = await fetch(`http://localhost:5050/api/classes/${classId}/students`);
         if (!response.ok) throw new Error("Failed to fetch students");
 
         const data = await response.json();
@@ -37,7 +37,7 @@ const ClassDetails = () => {
   useEffect(() => {
     setFilteredStudents(
       students.filter(student =>
-        `${student.studentSurname} ${student.studentFirstname} ${student.studentOtherNames}`
+        `${student.student_surname} ${student.student_first_name} ${student.student_other_names}`
           .toLowerCase()
           .includes(searchQuery.toLowerCase())
       )
@@ -59,7 +59,7 @@ const ClassDetails = () => {
     setPromoting(true);
     try {
       console.log(`Selected students: ${selectedStudents}`)
-      const response = await fetch(`${baseUrl}classes/promote`, {
+      const response = await fetch(`http://localhost:5050/api/classes/promote`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ classId, students: selectedStudents }),
@@ -80,7 +80,7 @@ const ClassDetails = () => {
     setDeleting(true);
     try {
       console.log("Deleting student IDs: ", selectedStudents); // Debugging log
-      const response = await fetch(`${baseUrl}students/deletion/students`, {
+      const response = await fetch(`http://localhost:5050/api/students/deletion/students`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ studentIds: selectedStudents }),
@@ -148,12 +148,12 @@ const ClassDetails = () => {
               {filteredStudents.map((student, index) => {
                 const totalOwing = student.fees?.reduce((acc, fee) => acc + fee.amount, 0) || 0;
                 return (
-                  <tr key={student._id} className="border-b hover:bg-gray-50">
+                  <tr key={student.id} className="border-b hover:bg-gray-50">
                     <td className="px-4 py-3 text-center">
-                      <input type="checkbox" onChange={() => handleSelectStudent(student._id)} checked={selectedStudents.includes(student._id)} />
+                      <input type="checkbox" onChange={() => handleSelectStudent(student.id)} checked={selectedStudents.includes(student.id)} />
                     </td>
                     <td className="px-4 py-3 text-center">{index + 1}</td>
-                    <td className="px-4 py-3">{`${student.studentSurname} ${student.studentFirstName} ${student.studentOtherNames}`}</td>
+                    <td className="px-4 py-3">{`${student.student_surname} ${student.student_first_name} ${student.student_other_names}`}</td>
                     <td className="px-4 py-3 text-center">GH₵ {totalOwing.toFixed(2)}</td>
                     <td className="px-4 py-3 text-center">
                       <button

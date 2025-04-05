@@ -11,7 +11,7 @@ export const StudentProvider = ({ children }) => {
 
         try {
             setLoading(true);
-            const response = await fetch(`http://localhost:3000/api/students/${schoolId}`);
+            const response = await fetch(`http://localhost:5050/api/students/${schoolId}`);
             const data = await response.json();
 
             if (response.ok) {

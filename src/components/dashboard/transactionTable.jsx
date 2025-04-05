@@ -23,8 +23,8 @@ const TransactionTable = ({ transactions }) => {
               <td className="border p-2">{transaction.amount}</td>
               <td className="border p-2">{new Date(transaction.date).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })
             }</td>
-              {transaction.transactionType === "Credit" ? <td className="border p-2 border-black text-green-500">{transaction.transactionType}</td> : <td className="border p-2 border-black text-red-500">{transaction.transactionType}</td> }
-              <td className="border p-2">{transaction.paymentMethod}</td>
+              {transaction.transactionType === "Credit" ? <td className="border p-2 border-black text-red-500">{transaction.transaction_type}</td> : <td className="border p-2 border-black text-green-500">{transaction.transaction_type}</td> }
+              <td className="border p-2">{transaction.payment_method}</td>
             </tr>
           ))}
         </tbody>

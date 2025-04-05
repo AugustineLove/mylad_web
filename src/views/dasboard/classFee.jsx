@@ -13,48 +13,80 @@ const ClassFees = () => {
   const [fixedAmount, setFixedAmount] = useState(0);
   const [editing, setEditing] = useState(false);
   const [dueDate, setDueDate] = useState("");
+  const [totalDebt, setTotalDebt] = useState(0);
 
   const { school } = useSchool();
-  
+
   const queryParams = new URLSearchParams(useLocation().search);
   const feeType = queryParams.get("type");
   const className = queryParams.get("class");
   const classId = queryParams.get("classId");
-  
+
   const navigate = useNavigate();
 
+  // Fetch Students
   useEffect(() => {
-    const fetchStudents = async () => {
+    const fetchStudentsWithDebt = async () => {
+      setLoading(true);
       try {
-        const response = await fetch(`${baseUrl}classes/${classId}/students`);
+        const response = await fetch(`http://localhost:5050/api/classes/${classId}/students`);
         if (!response.ok) throw new Error("Failed to fetch students");
-        const data = await response.json();
-        setStudents(data);
+        const studentsData = await response.json();
+  
+        // Fetch debt for each student and add it to their data
+        const studentsWithDebt = await Promise.all(
+          studentsData.map(async (student) => {
+            const totalDebt = await getStudentfeesTotal(student.id);
+            return { ...student, totalDebt }; // Add totalDebt to the student object
+          })
+        );
+  
+        setStudents(studentsWithDebt); // Set students with their total debt
       } catch (err) {
         setError(err.message);
       } finally {
         setLoading(false);
       }
     };
+  
+    fetchStudentsWithDebt();
+  }, [classId]); // Only run when classId changes
+  
 
+  const getStudentfeesTotal = async (studentId) => {
+    try {
+      const response = await fetch(`http://localhost:5050/api/students/fees/${studentId}/${feeType}`);
+      if (!response.ok) throw new Error(`Failed to fetch fees for student ${studentId}`);
+      const data = await response.json();
+      return data.totalDebt || 0; // Make sure to return 0 if there's no debt info
+    } catch (error) {
+      console.log(`Error getting total debt for student ${studentId}: ${error}`);
+      return 0; // Return 0 if there's an error
+    }
+  };
+  
+
+  // Fetch Fixed Amount for the class and fee type
+  useEffect(() => {
     const fetchFixedAmount = async () => {
       try {
-        const response = await fetch(`${baseUrl}classes/${classId}/${feeType}`);
+        const response = await fetch(`http://localhost:5050/api/classes/${classId}/${feeType}`);
         if (!response.ok) throw new Error("Failed to fetch fixed fee amount");
         const data = await response.json();
+        console.log(`Fixed amount ${JSON.stringify(data, null, 2)}`);
         setFixedAmount(data.amount);
       } catch (err) {
         console.error("Error fetching fixed amount:", err);
       }
     };
 
-    fetchStudents();
     fetchFixedAmount();
   }, [classId, feeType]);
 
+  // Update Fixed Amount
   const updateFixedAmount = async () => {
     try {
-      const response = await fetch(`${baseUrl}classes/${classId}/${feeType}`, {
+      const response = await fetch(`http://localhost:5050/api/classes/fees/${classId}/${feeType}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ classId, feeType, amount: fixedAmount, dueDate }),
@@ -70,11 +102,11 @@ const ClassFees = () => {
 
   const handleRowClick = (student, feeType) => {
     navigate(`student?type=${feeType}`, { state: { student } });
-  }
+  };
 
   const generatePDFReport = () => {
     const doc = new jsPDF();
-  
+
     // School and Class Details
     doc.setFont("helvetica", "bold");
     doc.setFontSize(16);
@@ -82,16 +114,16 @@ const ClassFees = () => {
     doc.setFontSize(12);
     doc.text(`Class: ${className}`, 105, 30, { align: "center" });
     doc.text(`Fee Type: ${feeType}`, 105, 40, { align: "center" });
-  
+
     // Add Report Date
     doc.setFontSize(10);
     const reportDate = new Date().toLocaleDateString("en-GB");
     doc.text(`Report Date: ${reportDate}`, 10, 50);
-  
+
     // Add a horizontal line under the header
     doc.setLineWidth(0.5);
     doc.line(10, 55, 200, 55);
-  
+
     // Table Data Preparation
     const tableData = students.map((student, index) => {
       const fee = student.fees?.find((f) => f.feeType === feeType);
@@ -102,7 +134,7 @@ const ClassFees = () => {
         fee ? fee.status : "N/A"
       ];
     });
-  
+
     // Add Table to PDF
     autoTable(doc, {
       head: [["#", "Student Name", "Amount (GHC)", "Status"]],
@@ -114,7 +146,7 @@ const ClassFees = () => {
       alternateRowStyles: { fillColor: [240, 240, 240] },
       margin: { top: 10 },
     });
-  
+
     // Add Total Fee Info at the Bottom
     const totalAmount = students.reduce((sum, student) => {
       const fee = student.fees?.find((f) => f.feeType === feeType);
@@ -122,16 +154,15 @@ const ClassFees = () => {
     }, 0);
     
     doc.text(`Total Amount for ${feeType}: GHC ${totalAmount.toFixed(2)}`, 10, doc.lastAutoTable.finalY + 10);
-  
+
     // Page Numbering
     const pageCount = doc.internal.getNumberOfPages();
     doc.setFontSize(8);
     doc.text(`Page ${pageCount}`, 200, doc.internal.pageSize.height - 10, { align: "right" });
-  
+
     // Save the PDF
     doc.save(`${feeType}_Report_${className}.pdf`);
   };
-  
 
   if (loading) return <p className="text-center text-xl text-gray-500">Loading...</p>;
 
@@ -197,25 +228,25 @@ const ClassFees = () => {
               <th className="px-6 py-4 text-center text-sm font-semibold">#</th>
               <th className="px-6 py-4 text-left text-sm font-semibold">Student Name</th>
               <th className="px-6 py-4 text-center text-sm font-semibold">Debt (GH₵)</th>
-             
             </tr>
           </thead>
           <tbody>
             {students
-              .filter(s => s.studentSurname.toLowerCase().includes(search.toLowerCase()))
+              .filter(s => s.student_surname.toLowerCase().includes(search.toLowerCase()))
               .map((student, index) => {
-                const fee = student.fees?.find((f) => f.feeType === feeType);
-                const studentFullName = `${student.studentSurname} ${student.studentFirstName} ${student.studentOtherNames}`;
+                const studentFullName = `${student.student_surname} ${student.student_first_name} ${student.student_other_names}`;
                 return (
                   <tr 
-                    key={student._id} 
+                    key={student.id} 
                     className="hover:bg-gray-100 cursor-pointer"
                     onClick={() => handleRowClick(student, feeType)}
                   >
                     <td className="px-6 py-4 text-center text-sm">{index + 1}</td>
                     <td className="px-6 py-4 text-sm">{studentFullName}</td>
-                    <td className="px-6 py-4 text-center text-sm">{fee ? fee.amount : "Not Assigned"}.00</td>
-                    
+                    <td className="px-6 py-4 text-center text-sm">
+                    {student.totalDebt ? `GHC ${student.totalDebt.toFixed(2)}` : 0}
+                  </td>
+
                   </tr>
                 );
               })}

@@ -6,7 +6,7 @@ import { baseUrl } from "../../constants/helpers";
 
 const ReportPage = () => {
     const { school } = useSchool();
-    const schoolId = school?._id;
+    const schoolId = school?.id;
 
     const [transactions, setTransactions] = useState([]);
     const [classes, setClasses] = useState([]);
@@ -19,14 +19,53 @@ const ReportPage = () => {
     const [error, setError] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
     const transactionsPerPage = 20;
+    
 
     useEffect(() => {
         if (schoolId) {
-            fetchData(`${baseUrl}classes/${schoolId}`, setClasses, "Failed to fetch classes.");
+            /* fetchData(`http://localhost:5050/api/classes/${schoolId}`, setClasses, "Failed to fetch classes."); */
+            fetchFeeTypesOfSchool();
         }
     }, [schoolId]);
 
-    const fetchData = async (url, setState, errorMessage) => {
+    useEffect(() => {
+        const fetchClasses = async () => {
+          try {
+            const response = await fetch(`http://localhost:5050/api/classes/${school.id}`);
+            if (!response.ok) throw new Error("Failed to fetch classes");
+    
+            const data = await response.json();
+            setClasses(data);
+          } catch (err) {
+            setError(err.message);
+          } finally {
+            setLoading(false);
+          }
+        };
+    
+        fetchClasses();
+      }, [school.id]);
+
+    const fetchFeeTypesOfSchool = async () => {
+        try {
+          const response = await fetch(`http://localhost:5050/api/schools/${school.id}/feeTypes`);
+          const data = await response.json();
+      
+          console.log("Raw API Response:", data);
+      
+          if (Array.isArray(data.feeTypes)) {
+            setFeeTypes(data.feeTypes); // Ensure you set the array, not the whole object
+            console.log(data.feeTypes)
+          } else {
+            console.error("Unexpected response format:", data);
+          }
+        } catch (error) {
+          console.error("Error fetching fee types:", error);
+        }
+      };
+      
+
+    /* const fetchData = async (url, setState, errorMessage) => {
         try {
             const res = await fetch(url);
             if (!res.ok) throw new Error(errorMessage);
@@ -38,7 +77,7 @@ const ReportPage = () => {
         } catch (err) {
             setError(errorMessage);
         }
-    };
+    }; */
 
     const fetchTransactions = async () => {
         if (!schoolId || !startDate || !endDate) {
@@ -60,7 +99,7 @@ const ReportPage = () => {
         });
 
         try {
-            const res = await fetch(`${baseUrl}transactions/trans/filterTransaction?${queryParams.toString()}`, {
+            const res = await fetch(`http://localhost:5050/api/transactions/trans/filterTransaction?${queryParams.toString()}`, {
                 method: "GET",
                 headers: { "Content-Type": "application/json" },
             });
@@ -68,6 +107,7 @@ const ReportPage = () => {
             if (!res.ok) throw new Error("Failed to fetch transactions.");
             const data = await res.json();
             setTransactions(data);
+            console.log(`Transactions ${JSON.stringify(data, null, 2)}`)
         } catch (err) {
             setError("Failed to fetch transactions.");
         } finally {
@@ -110,7 +150,7 @@ const ReportPage = () => {
                     >
                         <option value="all">All Classes</option>
                         {classes.map((cls) => (
-                            <option key={cls._id} value={cls.className}>{cls.className}</option>
+                            <option key={cls.id} value={cls.class_name}>{cls.class_name}</option>
                         ))}
                     </select>
                 </div>
@@ -124,7 +164,7 @@ const ReportPage = () => {
                     >
                         <option value="all">All Fee Types</option>
                         {feeTypes.map((feeType, index) => (
-                            <option key={index} value={feeType}>{feeType}</option>
+                            <option key={feeType.id} value={feeType.fee_type}>{feeType.fee_type}</option>
                         ))}
                     </select>
                 </div>
@@ -180,18 +220,20 @@ const ReportPage = () => {
                                 <th className="border p-3">Student Class</th>
                                 <th className="border p-3">Fee Type</th>
                                 <th className="border p-3">Transaction Type</th>
+                                <th className="border p-3">Payment Method</th>
                                 <th className="border p-3">Amount</th>
                                 <th className="border p-3">Date</th>
                             </tr>
                         </thead>
                         <tbody>
                             {transactions.map((txn) => (
-                                <tr key={txn._id} className="hover:bg-gray-100">
+                                <tr key={txn.id} className="hover:bg-gray-100">
                                     <td className="border p-3">{txn.studentName || "N/A"}</td>
                                     <td className="border p-3">{txn.className || "Unknown"}</td>
-                                    <td className="border p-3">{txn.feeType}</td>
-                                    <td className="border p-3">{txn.transactionType}</td>
-                                    <td className="border p-3">{txn.amount}.00</td>
+                                    <td className="border p-3">{txn.fee_type}</td>
+                                    <td className="border p-3">{txn.transaction_type}</td>
+                                    <td className="border p-3">{txn.payment_method}</td>
+                                    <td className="border p-3">{txn.amount}</td>
                                     <td className="border p-3">{new Date(txn.date).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}</td>
                                 </tr>
                             ))}

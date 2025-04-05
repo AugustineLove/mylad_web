@@ -17,10 +17,10 @@ const AddStudent = () => {
     studentOtherNames: "",
     studentGender: "",
     studentClass: "",
-    school: school._id,
+    schoolId: school.id,
     studentAddress: "",
-    studentParentSurname: "",
     studentParentFirstName: "",
+    studentParentSurname: "",
     studentParentNumber: "",
   });
 
@@ -36,7 +36,7 @@ const AddStudent = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch(`${baseUrl}students/add`, {
+      const response = await fetch(`http://localhost:5050/api/students/add`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -49,7 +49,7 @@ const AddStudent = () => {
       }
 
       alert("Student added successfully!");
-      updateStudents(school._id);
+      updateStudents(school.id);
       navigate("/dashboard");
       setFormData({
         studentFirstName: "",

@@ -13,10 +13,10 @@ export const SchoolProvider = ({ children }) => {
     if (!schoolId) return;
     try {
       setLoading(true);
-      const response = await fetch(`http://localhost:3000/api/schools/${schoolId}`);
+      const response = await fetch(`http://localhost:5050/api/schools/${schoolId}`);
       const data = await response.json();
 
-      console.log(`Schools data: ${data._id}`)
+      console.log(`Schools data: ${data.id}`)
 
       if (response.ok) {
         setSchool(data);
@@ -64,6 +64,7 @@ export const SchoolProvider = ({ children }) => {
   // Fetch school from localStorage on initial load
   useEffect(() => {
     const schoolId = localStorage.getItem("schoolId");
+    console.log(schoolId)
     if (schoolId) {
       updateSchool(schoolId);
     } else {

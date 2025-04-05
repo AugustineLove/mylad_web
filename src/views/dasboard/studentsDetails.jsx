@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import AppButton from '../../components/button';
 import { NavLink, useLocation } from 'react-router';
 import { useSchool } from '../../context/schoolContext';
@@ -15,25 +15,41 @@ const StudentsDetails = () => {
   const [debitFeeType, setDebitFeeType] = useState('');
   const [dueDate, setDueDate] = useState('');
   const [debitDueDate, setDebitDueDate] = useState('');
+  const [fees, setFees] = useState([]);
+  const [totalDebt, setTotalDept] = useState(0);
+
+
+  useEffect(() => {
+    getStudentfeesTotal();
+}, []);
 
   if (!student) return <p>No student data available.</p>;
+  const getStudentfeesTotal = async () => {
+    try {
+      const response = await fetch(`http://localhost:5050/api/students/fees/${student.id}`);
+      const data = await response.json();
+      setFees(data.feesBreakdown);
+      setTotalDept(data.totalDebt);
+    } catch (error) {
+      console.log(`Error getting total debt: ${error}`)
+    }
+  }
 
-  const totalDebt = student.fees.reduce((acc, fee) => acc + fee.amount, 0);
-
+  
   const refreshPage = () => {
     window.location.reload();
   };
 
   const sendMessageToParent = async (messageTo, price, parentName, studentName, feeType) => {
     try {
-      const response = await fetch(`${baseUrl}parents/sendMessage`, {
+      const response = await fetch(`http://localhost:5050/api/parents/sendMessage`, {
         method: 'POST',
         headers: {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
           messageTo,
-          messageFrom: `${school.schoolName.split(' ').map(word => word.charAt(0).toUpperCase()).join('')}-MYWARD`,
+          messageFrom: `${school.school_name.split(' ').map(word => word.charAt(0).toUpperCase()).join('')}-MYWARD`,
           message: `Dear Mr/Mrs. ${parentName} we've received your payment of GH₵${price}.00 for ${studentName}'s ${feeType}. Thank you for your timely payment, stay safe!`
         }),
       });
@@ -46,13 +62,15 @@ const StudentsDetails = () => {
     }
   };
 
-  const addTransaction = async (studentId, schoolId, amount, feeType, date, transactionType) => {
+  const addTransaction = async (studentId, schoolId, amount, feeType, date, transactionType, payment_method) => {
     try {
-      const response = await fetch(`${baseUrl}transactions/${student._id}`, {
+      const response = await fetch(`http://localhost:5050/api/transactions/${student.id}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ studentId, schoolId, amount, feeType, date, transactionType }),
+        body: JSON.stringify({ studentId, schoolId, amount, feeType, date, transactionType, payment_method }),
       });
+      const data = await response.json();
+      console.log(data)
 
       if (!response.ok) throw new Error("Failed to record transaction");
     } catch (err) {
@@ -67,16 +85,16 @@ const StudentsDetails = () => {
     }
 
     try {
-      const response = await fetch(`http://localhost/api/students/pay/${student._id}`, {
+      const response = await fetch(`http://localhost:5050/api/students/pay/${student.id}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ studentId: student._id, amountPaid: Number(paymentAmount), feeType: creditFeeType }),
+        body: JSON.stringify({ studentId: student.id, amountPaid: Number(paymentAmount), feeType: creditFeeType }),
       });
 
       if (response.ok) {
         console.log('Paying.................')
-        addTransaction(student._id, school._id, Number(paymentAmount), creditFeeType, dueDate, "Credit");
-        sendMessageToParent(student.studentParentNumber, Number(paymentAmount), student.studentParentSurname, student.studentFirstName, creditFeeType);
+        addTransaction(student.id, school.id, Number(paymentAmount), creditFeeType, dueDate, "Credit", "Cash");
+        sendMessageToParent(student.student_parent_number, Number(paymentAmount), student.student_parent_surname, student.student_first_name, creditFeeType);
         alert(`Successfully credited GH₵${paymentAmount} to ${creditFeeType}.`);
         setPaymentAmount('');
         refreshPage();
@@ -96,14 +114,14 @@ const StudentsDetails = () => {
     }
 
     try {
-      const response = await fetch(`${baseUrl}students/debit/${student._id}`, {
+      const response = await fetch(`http://localhost:5050/api/students/debit/${student.id}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ studentId: student._id, amount: Number(debitAmount), feeType: debitFeeType }),
+        body: JSON.stringify({ studentId: student.id, amount: Number(debitAmount), feeType: debitFeeType }),
       });
 
       if (response.ok) {
-        addTransaction(student._id, school._id, Number(debitAmount), debitFeeType, debitDueDate, "Debit");
+        addTransaction(student.id, school.id, Number(debitAmount), debitFeeType, debitDueDate, "Debit");
         alert(`Successfully added GH₵${debitAmount} for ${debitFeeType}.`);
         setDebitAmount('');
         refreshPage();
@@ -116,14 +134,16 @@ const StudentsDetails = () => {
     }
   };
 
+  
+
   return (
     <div className="container mx-auto p-8">
       <div className="flex justify-between items-start space-x-12 bg-white shadow-lg rounded-lg p-6">
         <div className="flex space-x-8 items-center w-[60%]">
-          <div className="w-[150px] h-[150px] rounded-full bg-gray-200 flex justify-center items-center text-3xl">{`${student.studentFirstName.charAt(0)}${student.studentSurname.charAt(0)}`}</div>
+          <div className="w-[150px] h-[150px] rounded-full bg-gray-200 flex justify-center items-center text-3xl">{`${student.student_first_name.charAt(0)}${student.student_surname.charAt(0)}`}</div>
           <div className="flex flex-col space-y-2">
-            <h1 className="text-3xl font-semibold text-gray-800">{student.studentFirstName} {student.studentSurname}</h1>
-            <p className="text-lg text-gray-600">Class: {student.studentClassName}</p>
+            <h1 className="text-3xl font-semibold text-gray-800">{student.student_first_name} {student.student_surname}</h1>
+            <p className="text-lg text-gray-600">Class: {student.student_class_name}</p>
             <p className="text-xl font-bold text-red-500">Outstanding Debt: GH₵{totalDebt}</p>
             <NavLink to={'editStudentDetails'} className='text-blue-500'>Edit details</NavLink>
           </div>
@@ -140,10 +160,10 @@ const StudentsDetails = () => {
               </tr>
             </thead>
             <tbody>
-              {student.fees.map((fee, index) => (
+              {fees.map((fee, index) => (
                 <tr key={index} className="border-b">
-                  <td className="p-3 text-gray-700">{fee.feeType}</td>
-                  <td className="p-3 text-gray-700">{fee.amount}</td>
+                  <td className="p-3 text-gray-700">{fee.fee_type}</td>
+                  <td className="p-3 text-gray-700">{fee.total}</td>
                 </tr>
               ))}
             </tbody>
@@ -161,8 +181,8 @@ const StudentsDetails = () => {
             className="p-2 rounded-md border border-gray-300"
           >
             <option value="" disabled>Select Fee Type</option>
-            {student.fees.filter(fee => fee.amount > 0).map((fee, index) => (
-              <option key={index} value={fee.feeType}>{fee.feeType}</option>
+            {fees.filter(fee => fee.total > 0).map((fee, index) => (
+              <option key={index} value={fee.fee_type}>{fee.fee_type}</option>
             ))}
           </select>
           <div className="flex flex-col space-y-4">
@@ -180,7 +200,7 @@ const StudentsDetails = () => {
               className="p-2 rounded-md border border-gray-300"
             />
           </div>
-          <p className="text-sm text-gray-600">This amount will be credited to {student.studentFirstName}'s account.</p>
+          <p className="text-sm text-gray-600">This amount will be credited to {student.student_first_name}'s account.</p>
           <AppButton name="Pay" onClick={handlePayment} />
         </div>
 
@@ -193,8 +213,8 @@ const StudentsDetails = () => {
             className="p-2 rounded-md border border-gray-300"
           >
             <option value="" disabled>Select Fee Type</option>
-            {student.fees.map((fee, index) => (
-              <option key={index} value={fee.feeType}>{fee.feeType}</option>
+            {fees.map((fee, index) => (
+              <option key={index} value={fee.fee_type}>{fee.fee_type}</option>
             ))}
           </select>
           <div className="flex flex-col space-y-4">

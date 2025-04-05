@@ -22,6 +22,8 @@ import EditSchoolDetails from "./views/dasboard/editSchoolDetails.jsx";
 import EditStudentDetails from "./views/dasboard/editStudentDetails.jsx";
 import AboutUs from "./views/aboutPage.jsx";
 import ContactPage from "./views/contactPage.jsx";
+import Subscribe from "./views/subscribePage.jsx";
+import PaymentCallback from "./views/paymentCallback.jsx";
 
 const root = document.getElementById("root");
 
@@ -35,6 +37,8 @@ ReactDOM.createRoot(root).render(
         <Route path='login' element={<Login />} />
         <Route path='about' element={<AboutUs />} />
         <Route path='contact' element={<ContactPage />} />
+        <Route path='subscribe' element={<Subscribe />} />
+        <Route path='paymentCallback' element={<PaymentCallback />} />
         <Route path="dashboard" element={<Dashboard />}>
         <Route index element={<DashboardHome/>} /> 
           <Route index element={<DashboardHome/>} /> 

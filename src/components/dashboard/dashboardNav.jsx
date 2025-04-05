@@ -39,10 +39,10 @@ const DashboardNav = () => {
         {/* School Info */}
         <div className="flex flex-col justify-center items-center text-center">
           <h1 className="text-2xl font-extrabold text-[#00c6ff] uppercase tracking-wide drop-shadow-md">
-            {school.schoolName}
+            {school.school_name}
           </h1>
-          <p className="text-gray-300 text-sm">{school.schoolEmail}</p>
-          <p className="text-gray-300 text-sm">{school.schoolAddress}</p>
+          <p className="text-gray-300 text-sm">{school.school_email}</p>
+          <p className="text-gray-300 text-sm">{school.school_address}</p>
         </div>
 
         {/* Buttons */}

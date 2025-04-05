@@ -9,20 +9,40 @@ const AddFeesPage = () => {
   const [feeTypes, setFeeTypes] = useState([]);
 
   useEffect(() => {
+    fetchFeeTypesOfSchool();
     if (school && school.feeTypes) {
       setFeeTypes(school.feeTypes);
     }
   }, [school]);
+
+  const fetchFeeTypesOfSchool = async () => {
+    try {
+      const response = await fetch(`http://localhost:5050/api/schools/${school.id}/feeTypes`);
+      const data = await response.json();
+  
+      console.log("Raw API Response:", data);
+  
+      if (Array.isArray(data.feeTypes)) {
+        setFeeTypes(data.feeTypes); // Ensure you set the array, not the whole object
+        console.log(data.feeTypes)
+      } else {
+        console.error("Unexpected response format:", data);
+      }
+    } catch (error) {
+      console.error("Error fetching fee types:", error);
+    }
+  };
+  
 
   const handleAddFeeType = async () => {
     const feeType = prompt("Enter new fee type:");
     if (!feeType) return;
 
     try {
-      const response = await fetch(`${baseUrl}/schools/${school._id}/addFeeType`, {
+      const response = await fetch(`http://localhost:5050/api/schools/${school.id}/addFeeType`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ schoolId: school._id, feeType: feeType, amount: 0 }),
+        body: JSON.stringify({ schoolId: school.id, feeType: feeType, amount: 0 }),
       });
 
       if (!response.ok) throw new Error("Failed to add fee type");
@@ -43,12 +63,12 @@ const AddFeesPage = () => {
       {/* Fee Type Cards */}
       <div className="w-full max-w-5xl grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
         {feeTypes.map((fee) => (
-          <NavLink key={fee.feeType} to={`selectedFees?type=${encodeURIComponent(fee.feeType)}`}>
+          <NavLink key={fee.id} to={`selectedFees?type=${encodeURIComponent(fee.fee_type)}`}>
             <div className="p-6 rounded-lg shadow-lg bg-gradient-to-r from-[#647DEE] to-[#7F53AC] hover:scale-105 transform transition-all duration-300 cursor-pointer">
 
-              <h1 className="text-xl font-semibold text-white">{fee.feeType}</h1>
+              <h1 className="text-xl font-semibold text-white">{fee.fee_type}</h1>
               <div className="w-full h-[2px] bg-white my-2"></div>
-              <p className="text-gray-200">View {fee.feeType} details</p>
+              <p className="text-gray-200">View {fee.fee_type} details</p>
             </div>
           </NavLink>
         ))}

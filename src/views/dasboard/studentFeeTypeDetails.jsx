@@ -21,21 +21,22 @@ const StudentFeeTypeDetails = () => {
 
   useEffect(() => {
     const fetchTransactions = async () => {
-      if (!student?._id || !feeType) return;
+      if (!student?.id || !feeType) return;
 
       try {
         setLoading(true);
-        const response = await fetch(`${baseUrl}transactions/${student._id}?feeType=${feeType}`);
+        const response = await fetch(`http://localhost:5050/api/transactions/${student.id}?feeType=${feeType}`);
         const data = await response.json();
         setTransactions(data);
 
+        getStudentfeesTotal(student.id)
         const studentFeeInfo = student?.fees?.find(f => f.feeType === feeType);
         const totalFeeForThisType = studentFeeInfo ? studentFeeInfo.amount : 0;
 
         const totalPaidAmount = data.reduce((sum, transaction) => sum + transaction.amount, 0);
 
         setTotalFeeForType(totalFeeForThisType);
-        setTotalPaid(totalPaidAmount);
+       
       } catch (error) {
         console.error("Error fetching transactions:", error);
       } finally {
@@ -46,9 +47,25 @@ const StudentFeeTypeDetails = () => {
     fetchTransactions();
   }, [student?._id, feeType]);
 
+
   const filteredTransactions = selectedDate
     ? transactions.filter(t => t.date.startsWith(selectedDate))
     : transactions;
+
+
+    const getStudentfeesTotal = async (studentId) => {
+      try {
+        const response = await fetch(`http://localhost:5050/api/students/fees/${studentId}/${feeType}`);
+        if (!response.ok) throw new Error(`Failed to fetch fees for student ${studentId}`);
+        const data = await response.json();
+        console.log(`Totalpaid: ${data.totalDebt}`)
+        setTotalPaid(data.totalDebt);
+        return data.totalDebt || 0; // Make sure to return 0 if there's no debt info
+      } catch (error) {
+        console.log(`Error getting total debt for student ${studentId}: ${error}`);
+        return 0; // Return 0 if there's an error
+      }
+    };
 
   const handleGenerateReport = () => {
     const doc = new jsPDF();
@@ -104,21 +121,21 @@ const StudentFeeTypeDetails = () => {
   };
 
   return (
-    <div className="p-8 bg-gradient-to-r from-blue-100 to-indigo-100 shadow-lg rounded-lg max-w-7xl mx-auto">
+    <div className="p-8 bg-gradient-to-r from-gray-100 to-gray-100 shadow-lg rounded-lg max-w-7xl mx-auto">
       <h1 className="text-4xl font-bold mb-6 text-center ">{feeType} Information</h1>
       
       <div className="flex flex-wrap items-center justify-between gap-6 mb-6">
         <div className="flex items-center space-x-6">
           <div className="bg-gray-200 text-gray-600 rounded-full w-24 h-24 flex justify-center items-center shadow-xl">
-            <h1 className="text-3xl font-semibold">{student?.studentName?.charAt(0)}</h1>
+            <h1 className="text-3xl font-semibold">{student?.student_first_name?.charAt(0)}</h1>
           </div>
           <div className="space-y-2">
-            <h2 className="text-3xl font-semibold">{student?.studentName}</h2>
+            <h2 className="text-3xl font-semibold">{student?.student_first_name}</h2>
             <h3 className="text-lg text-red-500">Total Amount Owed: GHC {totalFeeForType}</h3>
             <h3 className="text-lg text-green-500">Total Paid Amount: GHC {totalPaid}</h3>
-            <p className="text-black">Class: {student?.studentClassName}</p>
-            <p className="text-black">Parent: {student?.studentParentName}</p>
-            <p className="text-black">Parent Contact: {student?.studentParentNumber}</p>
+            <p className="text-black">Class: {student?.student_class_name}</p>
+            <p className="text-black">Parent: {student?.student_parent_surname}</p>
+            <p className="text-black">Parent Contact: {student?.student_parent_number}</p>
           </div>
         </div>
 
