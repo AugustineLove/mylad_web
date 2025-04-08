@@ -24,6 +24,7 @@ import AboutUs from "./views/aboutPage.jsx";
 import ContactPage from "./views/contactPage.jsx";
 import Subscribe from "./views/subscribePage.jsx";
 import PaymentCallback from "./views/paymentCallback.jsx";
+import BankAccountForm from "./views/bankForm.jsx";
 
 const root = document.getElementById("root");
 
@@ -39,6 +40,7 @@ ReactDOM.createRoot(root).render(
         <Route path='contact' element={<ContactPage />} />
         <Route path='subscribe' element={<Subscribe />} />
         <Route path='paymentCallback' element={<PaymentCallback />} />
+        <Route path='bankform' element={<BankAccountForm />} />
         <Route path="dashboard" element={<Dashboard />}>
         <Route index element={<DashboardHome/>} /> 
           <Route index element={<DashboardHome/>} /> 

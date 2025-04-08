@@ -145,7 +145,14 @@ const StudentsDetails = () => {
             <h1 className="text-3xl font-semibold text-gray-800">{student.student_first_name} {student.student_surname}</h1>
             <p className="text-lg text-gray-600">Class: {student.student_class_name}</p>
             <p className="text-xl font-bold text-red-500">Outstanding Debt: GH₵{totalDebt}</p>
-            <NavLink to={'editStudentDetails'} className='text-blue-500'>Edit details</NavLink>
+            <NavLink 
+            to="editStudentDetails"
+            state={{ student }}
+            className="text-blue-500"
+          >
+            Edit details
+          </NavLink>
+
           </div>
         </div>
 

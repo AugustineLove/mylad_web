@@ -34,7 +34,7 @@ const StudentFeeTypeDetails = () => {
         const totalFeeForThisType = studentFeeInfo ? studentFeeInfo.amount : 0;
 
         const totalPaidAmount = data.reduce((sum, transaction) => sum + transaction.amount, 0);
-
+        setTotalPaid(totalPaidAmount);
         setTotalFeeForType(totalFeeForThisType);
        
       } catch (error) {
@@ -94,9 +94,9 @@ const StudentFeeTypeDetails = () => {
       head: [["Date", "Amount (GHC)", "Transaction Type", "Payment Method"]],
       body: filteredTransactions.map(t => [
         new Date(t.date).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' }),
-        `GHC ${t.amount.toFixed(2)}`,
+        `GHC ${t.amount}`,
         t.transactionType,
-        t.paymentMethod
+        t.paymentMethod,
       ]),
       theme: "striped",
       styles: { fontSize: 10, cellPadding: 3 },
@@ -130,11 +130,11 @@ const StudentFeeTypeDetails = () => {
             <h1 className="text-3xl font-semibold">{student?.student_first_name?.charAt(0)}</h1>
           </div>
           <div className="space-y-2">
-            <h2 className="text-3xl font-semibold">{student?.student_first_name}</h2>
-            <h3 className="text-lg text-red-500">Total Amount Owed: GHC {totalFeeForType}</h3>
+            <h2 className="text-3xl font-semibold">{student?.student_surname}, {student?.student_first_name} {student?.student_other_names}</h2>
+            <h3 className="text-lg text-red-500">Total Amount Owed: GHC {totalPaid}</h3>
             <h3 className="text-lg text-green-500">Total Paid Amount: GHC {totalPaid}</h3>
             <p className="text-black">Class: {student?.student_class_name}</p>
-            <p className="text-black">Parent: {student?.student_parent_surname}</p>
+            <p className="text-black">Parent: {student?.student_parent_surname} {student?.student_parent_first_name}</p>
             <p className="text-black">Parent Contact: {student?.student_parent_number}</p>
           </div>
         </div>

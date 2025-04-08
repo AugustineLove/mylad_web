@@ -8,22 +8,31 @@ const Subscribe = () => {
 
   const schoolData = location.state;
 
+  console.log(`Settlement Bank Code: ${schoolData.schoolData.settlementBankCode}`)
+  console.log(`Sub account code: ${schoolData.schoolData.subAccountCode}`)
+
   useEffect(() => {
     if (!schoolData) {
       navigate("/login");
     } else {
-      console.log(`School email: ${schoolData?.schoolData?.school?.schoolEmail}`);
+      console.log(`School email: ${JSON.stringify(schoolData.schoolData.schoolEmail)}`);
     }
   }, [schoolData, navigate]);
 
   const handlePayment = async () => {
+    
     try {
+      
+
+
       const res = await axios.post("http://localhost:5050/api/paystack/initialize", {
-        email: schoolData.schoolData.school.schoolEmail,
-        amount: 350,
+        email: schoolData.schoolData.schoolEmail,
+        amount: 0.1,
       });
 
       const { authorization_url, reference } = res.data.data;
+
+      
 
       localStorage.setItem("pendingSchool", JSON.stringify(schoolData));
       localStorage.setItem("paystackRef", reference);
@@ -41,7 +50,7 @@ const Subscribe = () => {
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-800">Complete Your Subscription</h1>
           <p className="mt-2 text-gray-600">
-            Hello <span className="font-medium text-indigo-600">{schoolData?.schoolData.school.schoolName}</span>, get started with all features by making a subscription.
+            Hello <span className="font-medium text-indigo-600">{schoolData.schoolData.schoolName}</span>, get started with all features by making a subscription.
           </p>
         </div>
 
@@ -58,7 +67,7 @@ const Subscribe = () => {
               <span className="text-indigo-500 font-bold">✓</span> Backups
             </li>
             <li className="flex items-start gap-2">
-              <span className="text-indigo-500 font-bold">✓</span> One-time registration fee: <span className="font-semibold text-gray-900">GHS 350</span>
+              <span className="text-indigo-500 font-bold">✓</span> One-time registration fee: <span className="font-semibold text-gray-900">GHS 0.1</span>
             </li>
           </ul>
         </div>
@@ -67,7 +76,7 @@ const Subscribe = () => {
           onClick={handlePayment}
           className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-lg py-3 rounded-lg transition duration-300 shadow-md"
         >
-          Pay GHS 50 & Subscribe
+          Pay GHS 0.1 & Subscribe
         </button>
 
         <p className="mt-6 text-sm text-center text-gray-500">

@@ -3,7 +3,6 @@ import { useLocation, useNavigate } from "react-router";
 import autoTable from "jspdf-autotable";
 import jsPDF from "jspdf";
 import { useSchool } from "../../context/schoolContext";
-import { baseUrl } from "../../constants/helpers";
 
 const ClassFees = () => {
   const [students, setStudents] = useState([]);
@@ -13,7 +12,7 @@ const ClassFees = () => {
   const [fixedAmount, setFixedAmount] = useState(0);
   const [editing, setEditing] = useState(false);
   const [dueDate, setDueDate] = useState("");
-  const [totalDebt, setTotalDebt] = useState(0);
+  /* const [totalDebt, setTotalDebt] = useState(0); */
 
   const { school } = useSchool();
 
@@ -64,6 +63,8 @@ const ClassFees = () => {
       return 0; // Return 0 if there's an error
     }
   };
+
+  console.log(`Students: ${JSON.stringify(students)}`)
   
 
   // Fetch Fixed Amount for the class and fee type
@@ -106,64 +107,80 @@ const ClassFees = () => {
 
   const generatePDFReport = () => {
     const doc = new jsPDF();
-
-    // School and Class Details
+  
+    // Header: School Info
     doc.setFont("helvetica", "bold");
-    doc.setFontSize(16);
-    doc.text(`${school.schoolName}`, 105, 20, { align: "center" }); // Centered school name
+    doc.setFontSize(18);
+    doc.text(school.school_name.toUpperCase(), 105, 20, { align: "center" });
+  
+    doc.setFont("helvetica", "normal");
     doc.setFontSize(12);
-    doc.text(`Class: ${className}`, 105, 30, { align: "center" });
-    doc.text(`Fee Type: ${feeType}`, 105, 40, { align: "center" });
-
-    // Add Report Date
-    doc.setFontSize(10);
+    doc.text(`${feeType.toUpperCase()} REPORT`, 105, 28, { align: "center" });
+    doc.text(`Class: ${className}`, 105, 35, { align: "center" });
+  
+    // Report date
     const reportDate = new Date().toLocaleDateString("en-GB");
-    doc.text(`Report Date: ${reportDate}`, 10, 50);
-
-    // Add a horizontal line under the header
+    doc.setFontSize(10);
+    doc.text(`Report Date: ${reportDate}`, 14, 43);
+  
+    // Separator line
     doc.setLineWidth(0.5);
-    doc.line(10, 55, 200, 55);
-
-    // Table Data Preparation
-    const tableData = students.map((student, index) => {
-      const fee = student.fees?.find((f) => f.feeType === feeType);
-      return [
-        index + 1, 
-        student.studentName, 
-        fee ? `GHC ${fee.amount.toFixed(2)}` : "Not Assigned", 
-        fee ? fee.status : "N/A"
-      ];
-    });
-
-    // Add Table to PDF
+    doc.line(10, 47, 200, 47);
+  
+    // Table Data
+    const tableData = students.map((student, index) => [
+      index + 1,
+      `${student.student_surname} ${student.student_first_name} ${student.student_other_names}`,
+      `GHC ${student.totalDebt?.toFixed(2) || "0.00"}`
+    ]);
+  
     autoTable(doc, {
-      head: [["#", "Student Name", "Amount (GHC)", "Status"]],
+      head: [["#", "Student Name", "Debt (GHC)"]],
       body: tableData,
-      startY: 60,
+      startY: 52,
       theme: "striped",
-      styles: { fontSize: 10, cellPadding: 4 },
-      headStyles: { fillColor: [41, 128, 185], textColor: 255, fontStyle: "bold" },
-      alternateRowStyles: { fillColor: [240, 240, 240] },
+      styles: {
+        fontSize: 10,
+        cellPadding: 4,
+      },
+      headStyles: {
+        fillColor: [0, 102, 204],
+        textColor: 255,
+        fontStyle: "bold",
+      },
+      bodyStyles: {
+        textColor: 50,
+      },
+      columnStyles: {
+        0: { halign: "center", cellWidth: 15 },
+        1: { cellWidth: 120 },
+        2: { halign: "right", cellWidth: 40 },
+      },
       margin: { top: 10 },
     });
-
-    // Add Total Fee Info at the Bottom
-    const totalAmount = students.reduce((sum, student) => {
-      const fee = student.fees?.find((f) => f.feeType === feeType);
-      return fee ? sum + fee.amount : sum;
-    }, 0);
-    
-    doc.text(`Total Amount for ${feeType}: GHC ${totalAmount.toFixed(2)}`, 10, doc.lastAutoTable.finalY + 10);
-
-    // Page Numbering
+  
+    // Total Debt Summary
+    const totalDebt = students.reduce((sum, student) => sum + (student.totalDebt || 0), 0);
+    const totalY = doc.lastAutoTable.finalY + 10;
+  
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(12);
+    doc.text(`Total Class Debt: GHC ${totalDebt.toFixed(2)}`, 14, totalY);
+  
+    // Footer
+    const pageHeight = doc.internal.pageSize.height;
     const pageCount = doc.internal.getNumberOfPages();
-    doc.setFontSize(8);
-    doc.text(`Page ${pageCount}`, 200, doc.internal.pageSize.height - 10, { align: "right" });
-
-    // Save the PDF
-    doc.save(`${feeType}_Report_${className}.pdf`);
+  
+    doc.setFontSize(9);
+    doc.setFont("helvetica", "italic");
+    doc.text(`Generated on ${reportDate}`, 14, pageHeight - 10);
+    doc.text(`Page ${pageCount}`, 200, pageHeight - 10, { align: "right" });
+  
+    // Save file
+    const fileName = `${feeType.replace(/\s+/g, "_")}_Report_${className.replace(/\s+/g, "_")}.pdf`;
+    doc.save(fileName);
   };
-
+  
   if (loading) return <p className="text-center text-xl text-gray-500">Loading...</p>;
 
   return (

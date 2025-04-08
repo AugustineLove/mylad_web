@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router";
+import { useLocation, NavLink } from "react-router";
 import { useSchool } from "../../context/schoolContext";
-import { NavLink } from "react-router";
 import { baseUrl } from "../../constants/helpers";
 
 const ClassRecord = () => {
@@ -10,42 +9,46 @@ const ClassRecord = () => {
   const [error, setError] = useState("");
   const { school } = useSchool();
 
-  // Get feeType from the URL
+  // Get fee type from URL
   const queryParams = new URLSearchParams(useLocation().search);
   const feeType = queryParams.get("type");
 
   useEffect(() => {
     const fetchClasses = async () => {
       try {
-        const response = await fetch(`http://localhost:5050/api/classes/${school.id}`);
-        if (!response.ok) throw new Error("Failed to fetch classes");
+        const res = await fetch(`http://localhost:5050/api/classes/${school.id}`);
+        if (!res.ok) throw new Error("Failed to fetch classes");
 
-        const data = await response.json();
+        const data = await res.json();
         setClasses(data);
       } catch (err) {
-        setError(err.message);
+        setError(err.message || "Something went wrong");
       } finally {
         setLoading(false);
       }
     };
 
-    fetchClasses();
-  }, [school._id]);
+    if (school?.id) fetchClasses();
+  }, [school?.id]);
 
-  if (loading) return <p className="text-center mt-4 text-lg">Loading...</p>;
-  if (error) return <p className="text-center text-red-500 mt-4 text-lg">{error}</p>;
+  if (loading) return <p className="text-center mt-10 text-gray-500 text-lg">Loading...</p>;
+  if (error) return <p className="text-center mt-10 text-red-600 text-lg">{error}</p>;
 
   return (
-    <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-lg">
-      <h1 className="text-3xl font-extrabold text-center mb-6 text-indigo-600">{feeType}</h1>
+    <div className="max-w-5xl mx-auto px-4 py-10">
+      <h1 className="text-3xl font-bold text-center text-gray-800 mb-8">
+        {feeType || "Class Records"}
+      </h1>
+
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-        {classes.map((classItem) => (
-          <NavLink 
-            key={classItem.id} 
-            to={`classDetails?type=${encodeURIComponent(feeType)}&class=${encodeURIComponent(classItem.class_name)}&classId=${encodeURIComponent(classItem.id)}`}
+        {classes.map((cls) => (
+          <NavLink
+            key={cls.id}
+            to={`classDetails?type=${encodeURIComponent(feeType)}&class=${encodeURIComponent(cls.class_name)}&classId=${encodeURIComponent(cls.id)}`}
+            className="block border border-gray-200 rounded-xl p-6 shadow-sm hover:shadow-md transition duration-200 bg-white"
           >
-            <div className="p-6 bg-gradient-to-r from-indigo-500 to-indigo-300 rounded-lg shadow-xl hover:scale-105 transform transition-all duration-300 cursor-pointer text-center text-white font-semibold text-lg">
-              {classItem.class_name}
+            <div className="text-center">
+              <h2 className="text-lg font-semibold text-gray-700">{cls.class_name}</h2>
             </div>
           </NavLink>
         ))}

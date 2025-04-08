@@ -117,22 +117,84 @@ const ReportPage = () => {
 
     const downloadPDF = () => {
         const doc = new jsPDF();
-        doc.text("Transaction Report", 10, 10);
-
-        const tableColumn = ["Student Name", "Student Class", "Fee Type", "Transaction Type", "Amount", "Date"];
+    
+        // SCHOOL NAME – centered, uppercase, bold
+        const schoolName = (school?.school_name || "SCHOOL NAME").toUpperCase();
+        doc.setFontSize(16);
+        doc.setFont("helvetica", "bold");
+        doc.text(schoolName, doc.internal.pageSize.getWidth() / 2, 20, { align: "center" });
+    
+        // Divider line
+        doc.setDrawColor(0);
+        doc.line(14, 25, doc.internal.pageSize.getWidth() - 14, 25);
+    
+        // Transaction Report Title
+        doc.setFontSize(14);
+        doc.setFont("helvetica", "normal");
+        doc.text("Transaction Report", 14, 35);
+    
+        // Date generated
+        const generatedDate = new Date().toLocaleString();
+        doc.setFontSize(10);
+        doc.setTextColor(80);
+        doc.text(`Generated on: ${generatedDate}`, 14, 42);
+    
+        // Fee Type and Class
+        doc.setFontSize(11);
+        doc.setTextColor(50);
+        doc.text(`Fee Type: ${selectedFeeType || "All"}`, 14, 50);
+        doc.text(`Class: ${selectedClass || "All"}`, 90, 50); // Put it on the same line, right side
+    
+        // Another divider
+        doc.setDrawColor(150);
+        doc.line(14, 55, doc.internal.pageSize.getWidth() - 14, 55);
+    
+        // Table
+        const tableColumn = ["Student Name", "Class", "Fee Type", "Transaction Type", "Amount", "Date"];
         const tableRows = transactions.map(txn => [
             txn.studentName || "N/A",
             txn.className || "Unknown",
-            txn.feeType,
-            txn.transactionType,
-            txn.amount,
+            txn.fee_type || "N/A",
+            txn.transaction_type || "N/A",
+            txn.amount?.toString() || "0.00",
             new Date(txn.date).toLocaleDateString()
         ]);
-
-        autoTable(doc, { head: [tableColumn], body: tableRows, startY: 20 });
+    
+        autoTable(doc, {
+            head: [tableColumn],
+            body: tableRows,
+            startY: 60,
+            styles: {
+                fontSize: 10,
+                cellPadding: 3,
+            },
+            headStyles: {
+                fillColor: [63, 81, 181],
+                textColor: 255,
+                fontStyle: 'bold',
+            },
+            alternateRowStyles: {
+                fillColor: [245, 245, 245],
+            },
+            margin: { top: 60 },
+        });
+    
+        // Calculate total amount
+        const totalAmount = transactions.reduce((sum, txn) => sum + (parseFloat(txn.amount) || 0), 0).toFixed(2);
+    
+        // Display total amount
+        const pageHeight = doc.internal.pageSize.height;
+        const totalY = doc.lastAutoTable.finalY + 10;  // Position after the table
+        doc.setFontSize(12);
+        doc.setFont("helvetica", "bold");
+        doc.text(`Total Amount: GHS ${totalAmount}`, 14, totalY);
+    
+        // Save the PDF
         doc.save("transaction_report.pdf");
     };
-
+    
+    
+    
     // Calculate total amount
     const totalAmount = transactions.reduce((total, txn) => total + parseFloat(txn.amount || 0), 0).toFixed(2);
 
