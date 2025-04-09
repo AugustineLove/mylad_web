@@ -25,7 +25,7 @@ const StudentFeeTypeDetails = () => {
 
       try {
         setLoading(true);
-        const response = await fetch(`http://localhost:5050/api/transactions/${student.id}?feeType=${feeType}`);
+        const response = await fetch(`${baseUrl}transactions/${student.id}?feeType=${feeType}`);
         const data = await response.json();
         setTransactions(data);
 
@@ -55,7 +55,7 @@ const StudentFeeTypeDetails = () => {
 
     const getStudentfeesTotal = async (studentId) => {
       try {
-        const response = await fetch(`http://localhost:5050/api/students/fees/${studentId}/${feeType}`);
+        const response = await fetch(`${baseUrl}students/fees/${studentId}/${feeType}`);
         if (!response.ok) throw new Error(`Failed to fetch fees for student ${studentId}`);
         const data = await response.json();
         console.log(`Totalpaid: ${data.totalDebt}`)

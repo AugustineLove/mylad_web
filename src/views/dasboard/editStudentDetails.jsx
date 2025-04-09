@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import AppButton from '../../components/button';
 import { useSchool } from '../../context/schoolContext';
+import { baseUrl } from '../../constants/helpers';
 
 const EditStudentDetails = () => {
   const location = useLocation();
@@ -41,7 +42,7 @@ const EditStudentDetails = () => {
     }
 
     try {
-      const response = await fetch(`http://localhost:5050/api/students/edit`, {
+      const response = await fetch(`${baseUrl}students/edit`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

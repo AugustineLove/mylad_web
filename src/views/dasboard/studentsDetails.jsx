@@ -26,7 +26,7 @@ const StudentsDetails = () => {
   if (!student) return <p>No student data available.</p>;
   const getStudentfeesTotal = async () => {
     try {
-      const response = await fetch(`http://localhost:5050/api/students/fees/${student.id}`);
+      const response = await fetch(`${baseUrl}students/fees/${student.id}`);
       const data = await response.json();
       setFees(data.feesBreakdown);
       setTotalDept(data.totalDebt);
@@ -42,7 +42,7 @@ const StudentsDetails = () => {
 
   const sendMessageToParent = async (messageTo, price, parentName, studentName, feeType) => {
     try {
-      const response = await fetch(`http://localhost:5050/api/parents/sendMessage`, {
+      const response = await fetch(`${baseUrl}parents/sendMessage`, {
         method: 'POST',
         headers: {
           "Content-Type": "application/json"
@@ -64,7 +64,7 @@ const StudentsDetails = () => {
 
   const addTransaction = async (studentId, schoolId, amount, feeType, date, transactionType, payment_method) => {
     try {
-      const response = await fetch(`http://localhost:5050/api/transactions/${student.id}`, {
+      const response = await fetch(`${baseUrl}transactions/${student.id}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ studentId, schoolId, amount, feeType, date, transactionType, payment_method }),
@@ -85,7 +85,7 @@ const StudentsDetails = () => {
     }
 
     try {
-      const response = await fetch(`http://localhost:5050/api/students/pay/${student.id}`, {
+      const response = await fetch(`${baseUrl}students/pay/${student.id}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ studentId: student.id, amountPaid: Number(paymentAmount), feeType: creditFeeType }),
@@ -114,7 +114,7 @@ const StudentsDetails = () => {
     }
 
     try {
-      const response = await fetch(`http://localhost:5050/api/students/debit/${student.id}`, {
+      const response = await fetch(`${baseUrl}students/debit/${student.id}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ studentId: student.id, amount: Number(debitAmount), feeType: debitFeeType }),

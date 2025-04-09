@@ -16,7 +16,7 @@ const ClassRecord = () => {
   useEffect(() => {
     const fetchClasses = async () => {
       try {
-        const res = await fetch(`http://localhost:5050/api/classes/${school.id}`);
+        const res = await fetch(`${baseUrl}classes/${school.id}`);
         if (!res.ok) throw new Error("Failed to fetch classes");
 
         const data = await res.json();

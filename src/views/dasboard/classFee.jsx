@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "react-router";
 import autoTable from "jspdf-autotable";
 import jsPDF from "jspdf";
 import { useSchool } from "../../context/schoolContext";
+import { baseUrl } from "../../constants/helpers";
 
 const ClassFees = () => {
   const [students, setStudents] = useState([]);
@@ -28,7 +29,7 @@ const ClassFees = () => {
     const fetchStudentsWithDebt = async () => {
       setLoading(true);
       try {
-        const response = await fetch(`http://localhost:5050/api/classes/${classId}/students`);
+        const response = await fetch(`${baseUrl}classes/${classId}/students`);
         if (!response.ok) throw new Error("Failed to fetch students");
         const studentsData = await response.json();
   
@@ -54,7 +55,7 @@ const ClassFees = () => {
 
   const getStudentfeesTotal = async (studentId) => {
     try {
-      const response = await fetch(`http://localhost:5050/api/students/fees/${studentId}/${feeType}`);
+      const response = await fetch(`${baseUrl}students/fees/${studentId}/${feeType}`);
       if (!response.ok) throw new Error(`Failed to fetch fees for student ${studentId}`);
       const data = await response.json();
       return data.totalDebt || 0; // Make sure to return 0 if there's no debt info
@@ -71,7 +72,7 @@ const ClassFees = () => {
   useEffect(() => {
     const fetchFixedAmount = async () => {
       try {
-        const response = await fetch(`http://localhost:5050/api/classes/${classId}/${feeType}`);
+        const response = await fetch(`${baseUrl}classes/${classId}/${feeType}`);
         if (!response.ok) throw new Error("Failed to fetch fixed fee amount");
         const data = await response.json();
         console.log(`Fixed amount ${JSON.stringify(data, null, 2)}`);
@@ -87,7 +88,7 @@ const ClassFees = () => {
   // Update Fixed Amount
   const updateFixedAmount = async () => {
     try {
-      const response = await fetch(`http://localhost:5050/api/classes/fees/${classId}/${feeType}`, {
+      const response = await fetch(`${baseUrl}classes/fees/${classId}/${feeType}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ classId, feeType, amount: fixedAmount, dueDate }),

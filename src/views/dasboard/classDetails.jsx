@@ -19,7 +19,7 @@ const ClassDetails = () => {
   useEffect(() => {
     const fetchStudents = async () => {
       try {
-        const response = await fetch(`http://localhost:5050/api/classes/${classId}/students`);
+        const response = await fetch(`${baseUrl}classes/${classId}/students`);
         if (!response.ok) throw new Error("Failed to fetch students");
 
         const data = await response.json();
@@ -59,7 +59,7 @@ const ClassDetails = () => {
     setPromoting(true);
     try {
       console.log(`Selected students: ${selectedStudents}`)
-      const response = await fetch(`http://localhost:5050/api/classes/promote`, {
+      const response = await fetch(`${baseUrl}classes/promote`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ classId, students: selectedStudents }),
@@ -80,7 +80,7 @@ const ClassDetails = () => {
     setDeleting(true);
     try {
       console.log("Deleting student IDs: ", selectedStudents); // Debugging log
-      const response = await fetch(`http://localhost:5050/api/students/deletion/students`, {
+      const response = await fetch(`${baseUrl}students/deletion/students`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ studentIds: selectedStudents }),

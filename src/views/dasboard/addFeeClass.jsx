@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { NavLink } from "react-router";
 import { useSchool } from "../../context/schoolContext";
+import { baseUrl } from "../../constants/helpers";
 
 const AddFeesPage = () => {
   const { school } = useSchool();
@@ -14,7 +15,7 @@ const AddFeesPage = () => {
 
   const fetchFeeTypesOfSchool = async () => {
     try {
-      const response = await fetch(`http://localhost:5050/api/schools/${school.id}/feeTypes`);
+      const response = await fetch(`${baseUrl}schools/${school.id}/feeTypes`);
       const data = await response.json();
 
       if (Array.isArray(data.feeTypes)) {
@@ -34,7 +35,7 @@ const AddFeesPage = () => {
     if (!feeType) return;
 
     try {
-      const response = await fetch(`http://localhost:5050/api/schools/${school.id}/addFeeType`, {
+      const response = await fetch(`${baseUrl}schools/${school.id}/addFeeType`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ schoolId: school.id, feeType, amount: 0 }),
@@ -54,7 +55,7 @@ const AddFeesPage = () => {
     if (!confirmDelete) return;
 
     try {
-      const response = await fetch(`http://localhost:5050/api/schools/deleteFeeType`, {
+      const response = await fetch(`${baseUrl}schools/deleteFeeType`, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ schoolId: school.id, feeType }),
