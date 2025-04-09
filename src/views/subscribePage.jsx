@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router";
 import axios from "axios";
+import { baseUrl } from "../constants/helpers";
 
 const Subscribe = () => {
   const location = useLocation();
@@ -25,7 +26,7 @@ const Subscribe = () => {
       
 
 
-      const res = await axios.post("http://localhost:5050/api/paystack/initialize", {
+      const res = await axios.post(`${baseUrl}paystack/initialize`, {
         email: schoolData.schoolData.schoolEmail,
         amount: 0.1,
       });

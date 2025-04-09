@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import AppButton from "../components/button";
 import NavBar from "../components/navBar";
+import { baseUrl } from "../constants/helpers";
+import { base } from "motion/react-client";
 
 const Login = () => {
   const [isSignUp, setIsSignUp] = useState(false);
@@ -14,7 +16,7 @@ const Login = () => {
     if (isSignUp) {
       const fetchBanks = async () => {
         try {
-          const response = await fetch("http://localhost:5050/api/paystack/getBanks");
+          const response = await fetch(`${baseUrl}paystack/getBanks`);
           const data = await response.json();
           console.log(`Data: ${JSON.stringify(data)}`);
           if (data && data.status) {
@@ -87,7 +89,7 @@ const Login = () => {
     }
   
     try {
-      const response = await fetch(`http://localhost:5050/api/paystack/getAccountHolderName?accountNumber=${accountNumber}&bankCode=${bankofChoice?.code}`);
+      const response = await fetch(`${baseUrl}paystack/getAccountHolderName?accountNumber=${accountNumber}&bankCode=${bankofChoice?.code}`);
       const data = await response.json();
       if (data) {
         setAccountHolderName(data.accountHolderName);
@@ -111,7 +113,7 @@ const Login = () => {
     try {
       const url = isSignUp
         ? ""
-        : `http://localhost:5050/api/schools/login`;
+        : `${baseUrl}schools/login`;
 
       const payload = {
         schoolWebsite: formData.schoolWebsite,

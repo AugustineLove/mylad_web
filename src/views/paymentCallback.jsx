@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router";
 import axios from "axios";
+import { baseUrl } from "../constants/helpers";
 
 const PaymentCallback = () => {
   const navigate = useNavigate();
@@ -14,7 +15,7 @@ const PaymentCallback = () => {
         console.log("Starting payment verification...");
   
         // Step 1: Verify payment
-        const verifyRes = await axios.get(`http://localhost:5050/api/paystack/verify/${reference}`);
+        const verifyRes = await axios.get(`${baseUrl}paystack/verify/${reference}`);
         console.log("Paystack verification response:", verifyRes.data);
   
         if (verifyRes.data?.data?.status === "success") {
@@ -32,7 +33,7 @@ const PaymentCallback = () => {
 
           console.log(`Subaccount data: ${JSON.stringify(subaccountPayload)}`)
 
-          const subRes = await axios.post("http://localhost:5050/api/paystack/createSubAccount", subaccountPayload);
+          const subRes = await axios.post(`${baseUrl}paystack/createSubAccount`, subaccountPayload);
           console.log("Subaccount response:", subRes.data);
 
           // Save subaccount code in the school data
@@ -44,7 +45,7 @@ const PaymentCallback = () => {
           console.log(`Subaccount being posted: ${JSON.stringify(schoolData.schoolData)}`)
   
           // Step 2: Create school
-          const addRes = await axios.post("http://localhost:5050/api/schools/add", schoolData.schoolData);
+          const addRes = await axios.post(`${baseUrl}schools/add`, schoolData.schoolData);
           console.log("School creation response:", addRes);
   
           if (addRes.status === 201) {

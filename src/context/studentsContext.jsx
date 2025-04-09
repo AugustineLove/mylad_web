@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect } from "react";
+import { baseUrl } from "../constants/helpers";
 
 const StudentContext = createContext();
 
@@ -11,7 +12,7 @@ export const StudentProvider = ({ children }) => {
 
         try {
             setLoading(true);
-            const response = await fetch(`http://localhost:5050/api/students/${schoolId}`);
+            const response = await fetch(`${baseUrl}students/${schoolId}`);
             const data = await response.json();
 
             if (response.ok) {
