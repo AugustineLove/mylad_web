@@ -31,7 +31,7 @@ const ReportPage = () => {
     useEffect(() => {
         const fetchClasses = async () => {
           try {
-            const response = await fetch(`http://localhost:5050/api/classes/${school.id}`);
+            const response = await fetch(`${baseUrl}classes/${school.id}`);
             if (!response.ok) throw new Error("Failed to fetch classes");
     
             const data = await response.json();
@@ -48,7 +48,7 @@ const ReportPage = () => {
 
     const fetchFeeTypesOfSchool = async () => {
         try {
-          const response = await fetch(`http://localhost:5050/api/schools/${school.id}/feeTypes`);
+          const response = await fetch(`${baseUrl}schools/${school.id}/feeTypes`);
           const data = await response.json();
       
           console.log("Raw API Response:", data);
@@ -99,7 +99,7 @@ const ReportPage = () => {
         });
 
         try {
-            const res = await fetch(`http://localhost:5050/api/transactions/trans/filterTransaction?${queryParams.toString()}`, {
+            const res = await fetch(`${baseUrl}transactions/trans/filterTransaction?${queryParams.toString()}`, {
                 method: "GET",
                 headers: { "Content-Type": "application/json" },
             });

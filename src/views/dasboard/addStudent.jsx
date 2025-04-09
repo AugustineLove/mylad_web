@@ -36,7 +36,7 @@ const AddStudent = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch(`http://localhost:5050/api/students/add`, {
+      const response = await fetch(`${baseUrl}students/add`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
