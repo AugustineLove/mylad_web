@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
+import { baseUrl } from "../../constants/helpers";
 
 const StudentTable = ({ studentsData }) => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -9,7 +10,7 @@ const StudentTable = ({ studentsData }) => {
 
   useEffect(() => {
     // Fetch fees for all students
-    fetch("http://localhost:5050/api/students/feeType/balance") // Update with your actual API endpoint
+    fetch(`${baseUrl}students/feeType/balance`) // Update with your actual API endpoint
       .then((res) => res.json())
       .then((data) => {
         data.forEach((item, index) => {
