@@ -3,7 +3,6 @@ import { useNavigate } from "react-router";
 import AppButton from "../components/button";
 import NavBar from "../components/navBar";
 import { baseUrl } from "../constants/helpers";
-import { base } from "motion/react-client";
 
 const Login = () => {
   const [isSignUp, setIsSignUp] = useState(false);

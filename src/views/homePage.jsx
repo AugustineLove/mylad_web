@@ -29,7 +29,7 @@ const HomePage = () => {
       ];
 
   return (
-    <section className='px-20 py-16 bg-gradient-to-b from-white to-gray-100'>
+    <section className='px-3 lg:px-0 py-16 bg-gradient-to-b from-white to-gray-100'>
    {/* Hero Section */}
 <motion.div 
   className='relative flex items-center justify-between px-6 py-16 lg:py-32 lg:px-24 bg-gradient-to-r from-[#2d098d] to-[#3c2a8d] text-white'
@@ -51,11 +51,11 @@ const HomePage = () => {
 
   {/* Right Section: Image */}
   <motion.div 
-    className='relative w-full lg:w-1/2 h-[450px] md:h-[500px] rounded-xl overflow-hidden shadow-xl transform transition-all duration-300'
+    className='relative w-0 lg:w-1/2 h-[450px] md:h-[500px] rounded-xl overflow-hidden shadow-xl transform transition-all duration-300'
     whileHover={{ scale: 1.05 }}
   >
     <img 
-      className='object-cover w-full h-full absolute top-0 left-0' 
+      className='object-cover lg:w-full lg:h-full absolute top-0 left-0' 
       src='student.avif' 
       alt='Students'
     />
@@ -189,7 +189,7 @@ const HomePage = () => {
 
      {/* Mobile Application */}
 <motion.div 
-  className='w-full flex justify-center items-center mt-36 gap-16 px-6 lg:px-16' 
+  className='w-100 lg:w-full flex justify-center items-center mt-36 gap-16 px-6 lg:px-16' 
   initial='hidden' 
   animate='visible' 
   variants={fadeIn}
@@ -212,17 +212,17 @@ const HomePage = () => {
     </div>
 
   {/* Right Column (Phone Image with Animation) */}
-  <div className='relative lg:w-2/5 h-full'>
+  <div className='relative w-0 lg:w-2/5 h-full'>
     {/* Phone image */}
     <motion.img 
-      className='absolute w-[100%] lg:w-[70%] object-cover bottom-[-350px] left-0 rounded-xl z-10' 
+      className='absolute lg:w-[70%] object-cover bottom-[-350px] left-0 rounded-xl z-10' 
       src='phone.png' 
       alt='Mobile App' 
       whileHover={{ scale: 1.05 }}
     />
     {/* Overlay Image (Choose School) */}
     <motion.img 
-      className='absolute right-10 bottom-[-350px] lg:right-24 w-20 lg:w-[70%] z-1' 
+      className='absolute right-10 bottom-[-350px] lg:right-24 w-0 lg:w-[70%] z-1' 
       src='chooseschool.png' 
       alt='Choose School' 
       initial={{ opacity: 0, scale: 0.8 }} 

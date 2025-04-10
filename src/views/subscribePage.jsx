@@ -12,11 +12,13 @@ const Subscribe = () => {
   console.log(`Settlement Bank Code: ${schoolData.schoolData.settlementBankCode}`)
   console.log(`Sub account code: ${schoolData.schoolData.subAccountCode}`)
 
+  console.log(`School Data: `, schoolData);
+
   useEffect(() => {
     if (!schoolData) {
       navigate("/login");
     } else {
-      console.log(`School email: ${JSON.stringify(schoolData.schoolData.schoolEmail)}`);
+      console.log(`School emails: ${JSON.stringify(schoolData.schoolData.schoolEmail)}`);
     }
   }, [schoolData, navigate]);
 
