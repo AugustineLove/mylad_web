@@ -219,7 +219,7 @@ const Login = () => {
 
                 {/* Payment Method Selection */}
                 <div className="pt-4">
-                  <label className="block text-black-700 font-bold text-2xl mb-5">Payment Method</label>
+                  <label className="block text-black-700 font-bold text-2xl mb-5">School Account</label>
                   <div className="flex space-x-4">
                     <label>
                       <input
