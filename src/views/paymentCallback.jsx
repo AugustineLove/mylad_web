@@ -34,13 +34,13 @@ const PaymentCallback = () => {
           console.log(`Subaccount data: ${JSON.stringify(subaccountPayload)}`)
 
           const subRes = await axios.post(`${baseUrl}paystack/createSubAccount`, subaccountPayload);
-          console.log("Subaccount response:", subRes.data);
+          console.log("Subaccount response:", JSON.stringify(subRes.data));
 
           // Save subaccount code in the school data
           schoolData.schoolData.subAccountCode = subRes.data.subaccount_code;
 
           console.log(`Subaccount code 1: ${schoolData.schoolData.subAccountCode}`)
-          console.log(`Subaccount code 2: ${schoolData.schoolData.subaccount_code}`)
+          console.log(`Subaccount code 2: ${subRes.data.subaccount_code}`)
 
           console.log(`Subaccount being posted: ${JSON.stringify(schoolData.schoolData)}`)
   
