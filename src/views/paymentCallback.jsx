@@ -37,7 +37,8 @@ const PaymentCallback = () => {
           console.log("Subaccount response:", JSON.stringify(subRes.data));
 
           // Save subaccount code in the school data
-          schoolData.schoolData.subAccountCode = subRes.data.subaccount_code;
+          schoolData.schoolData.subAccountCode = subRes.data.data.subaccount_code;
+          schoolData.schoolData.subAccountHolderName = subRes.data.data.account_name;
 
           console.log(`Subaccount code 1: ${schoolData.schoolData.subAccountCode}`);
           console.log(`Subaccount code 2: ${subRes.data.data.subaccount_code}`);
@@ -47,7 +48,7 @@ const PaymentCallback = () => {
   
           // Step 2: Create school
           const addRes = await axios.post(`${baseUrl}schools/add`, schoolData.schoolData);
-          console.log("School creation response:", addRes);
+          console.log("School creation response:", JSON.stringify(addRes.data));
   
           if (addRes.status === 201) {
             alert("School created successfully!");

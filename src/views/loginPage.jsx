@@ -45,6 +45,7 @@ const Login = () => {
     mobileMoneyProvider: "",
     mobileMoneyNumber: "",
     subAccountCode: "",
+    accountHolderName: accountHolderName,
   });
   const momoProviders = [
     "MTN",
