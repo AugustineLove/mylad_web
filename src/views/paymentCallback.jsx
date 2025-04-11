@@ -39,8 +39,9 @@ const PaymentCallback = () => {
           // Save subaccount code in the school data
           schoolData.schoolData.subAccountCode = subRes.data.subaccount_code;
 
-          console.log(`Subaccount code 1: ${schoolData.schoolData.subAccountCode}`)
-          console.log(`Subaccount code 2: ${subRes.data.subaccount_code}`)
+          console.log(`Subaccount code 1: ${schoolData.schoolData.subAccountCode}`);
+          console.log(`Subaccount code 2: ${subRes.data.data.subaccount_code}`);
+
 
           console.log(`Subaccount being posted: ${JSON.stringify(schoolData.schoolData)}`)
   
