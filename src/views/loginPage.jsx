@@ -193,7 +193,7 @@ const Login = () => {
                   placeholder="Account Number"
                 />
                 {accountHolderName && (
-                  <p className="text-green-500 mt-2">
+                  <p className="text-red-500 mt-2">
                     Account Holder: {accountHolderName}
                   </p>
                 )}
