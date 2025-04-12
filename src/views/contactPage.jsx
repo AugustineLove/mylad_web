@@ -58,7 +58,7 @@ const ContactPage = () => {
           <p className='text-gray-600 mb-4'>Contact our team through these channels:</p>
           <div className='space-y-3'>
             <div className='flex items-center space-x-2'><EmailCard /> <a href='' className='contact-link'>Send us an email</a></div>
-            <div className='flex items-center space-x-2'><WhatsAppIcon /> <a href='' className='contact-link'>WhatsApp Message</a></div>
+            <div className='flex items-center space-x-2'><WhatsAppIcon /> <a href='https://wa.me/+233542384752' className='contact-link'>WhatsApp Message</a></div>
           </div>
 
           <h1 className='text-lg font-bold text-gray-900 mt-6 mb-2'>Call Us</h1>
