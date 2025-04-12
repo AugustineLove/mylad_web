@@ -22,15 +22,13 @@ const AppFooter = () => {
             <li className="hover:text-gray-300 cursor-pointer transition duration-300 ease-in-out transform hover:scale-105">
               <a href="#">Our Website</a>
             </li>
-            <li className="hover:text-gray-300 cursor-pointer transition duration-300 ease-in-out transform hover:scale-105">
+           {/*  <li className="hover:text-gray-300 cursor-pointer transition duration-300 ease-in-out transform hover:scale-105">
               <a href="#">Schools</a>
-            </li>
+            </li> */}
             <li className="hover:text-gray-300 cursor-pointer transition duration-300 ease-in-out transform hover:scale-105">
-              <a href="#">Get Started</a>
+              <a href="login">Get Started</a>
             </li>
-            <li className="hover:text-gray-300 cursor-pointer transition duration-300 ease-in-out transform hover:scale-105">
-              <a href="#">Login</a>
-            </li>
+           
             <li className="hover:text-gray-300 cursor-pointer transition duration-300 ease-in-out transform hover:scale-105">
               <a href="/mobilePolicies">Mobile Policy</a>
             </li>

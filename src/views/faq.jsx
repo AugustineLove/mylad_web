@@ -4,12 +4,12 @@ import { ChevronDown, ChevronUp } from "lucide-react";
 
 const faqs = [
   {
-    question: "What is the School Management System?",
-    answer: "It's a digital platform that allows schools to manage students, fees, and other academic records efficiently.",
+    question: "What is the Fee Management System?",
+    answer: "It's a digital platform that allows schools to manage students, fee records efficiently.",
   },
   {
     question: "How do parents access their child’s fee details?",
-    answer: "Parents can search for their child’s school in the app and verify their identity using a registered phone number.",
+    answer: "Parents can find their child’s school in the app and verify their identity using a registered phone number.",
   },
   {
     question: "Can a school set custom fees for different classes?",
@@ -20,6 +20,11 @@ const faqs = [
     answer: "Absolutely. The platform integrates with Paystack for secure and reliable transactions.",
   },
   {
+    question:"What happens if I mistakenly credit a parrticular fee type?",
+    answer: "Debit that fee type and credit your desired fee type.",
+  },
+  {
+
     question: "Can a school have multiple classes and students?",
     answer: "Yes, each school can manage multiple classes, with as many students as needed.",
   },
