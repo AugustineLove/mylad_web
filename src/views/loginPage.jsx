@@ -8,8 +8,22 @@ const Login = () => {
   const [isSignUp, setIsSignUp] = useState(false);
   const navigate = useNavigate();
   const [availableBanks, setAvailableBanks] = useState([]);
-  const [accountHolderName, setAccountHolderName] = useState(""); // Store account holder name
-  const [bankofChoice, setBankOfChoice] = useState(""); // Store bank of choice
+  const [accountHolderName, setAccountHolderName] = useState("");
+  const [bankofChoice, setBankOfChoice] = useState("");
+
+  const [formData, setFormData] = useState({
+    schoolName: "",
+    schoolAddress: "",
+    schoolPhone: "",
+    schoolWebsite: "",
+    schoolEmail: "",
+    schoolPassword: "",
+    bankName: "",
+    bankAccountNumber: "",
+    settlementBankCode: "",
+    subAccountCode: "",
+    accountHolderName: accountHolderName,
+  });
 
   useEffect(() => {
     if (isSignUp) {
@@ -17,7 +31,6 @@ const Login = () => {
         try {
           const response = await fetch(`${baseUrl}paystack/getBanks`);
           const data = await response.json();
-          console.log(`Data: ${JSON.stringify(data)}`);
           if (data && data.status) {
             setAvailableBanks(data.data);
           } else {
@@ -31,47 +44,22 @@ const Login = () => {
     }
   }, [isSignUp]);
 
-  const [formData, setFormData] = useState({
-    schoolName: "",
-    schoolAddress: "",
-    schoolPhone: "",
-    schoolWebsite: "",
-    schoolEmail: "",
-    schoolPassword: "",
-    paymentMethod: "bank", // default to bank
-    bankName: "",
-    bankAccountNumber: "",
-    settlementBankCode: "",
-    mobileMoneyProvider: "",
-    mobileMoneyNumber: "",
-    subAccountCode: "",
-    accountHolderName: accountHolderName,
-  });
-  const momoProviders = [
-    "MTN",
-    "Telecel",
-    "AirtelTigo"
-  ]
-
   const handleChange = (e) => {
     const { name, value } = e.target;
-    
-    // If selecting a bank name, find the code
+
     if (name === "bankName") {
       const selectedBank = availableBanks.find((bank) => bank.name === value);
       setBankOfChoice(selectedBank);
       setFormData((prevData) => ({
         ...prevData,
         bankName: value,
-        settlementBankCode: selectedBank?.code || "", // safely assign code
+        settlementBankCode: selectedBank?.code || "",
       }));
     } else if (name === "bankAccountNumber") {
       setFormData((prevData) => ({
         ...prevData,
         bankAccountNumber: value,
       }));
-
-      // Fetch account holder name when bank account number is entered
       fetchAccountHolderName(value);
     } else {
       setFormData((prevData) => ({
@@ -82,12 +70,11 @@ const Login = () => {
   };
 
   const fetchAccountHolderName = async (accountNumber) => {
-    // Check if the account number is 13 digits long
     if (accountNumber.length < 10) {
-      setAccountHolderName("Account number must be exactly 13 digits long");
+      setAccountHolderName("Account number must be at least 10 digits long");
       return;
     }
-  
+
     try {
       const response = await fetch(`${baseUrl}paystack/getAccountHolderName?accountNumber=${accountNumber}&bankCode=${bankofChoice?.code}`);
       const data = await response.json();
@@ -101,19 +88,12 @@ const Login = () => {
       setAccountHolderName("Error fetching account holder name");
     }
   };
-  
-
-  const handlePaymentMethodChange = (e) => {
-    setFormData({ ...formData, paymentMethod: e.target.value });
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const url = isSignUp
-        ? ""
-        : `${baseUrl}schools/login`;
+      const url = isSignUp ? "" : `${baseUrl}schools/login`;
 
       const payload = {
         schoolWebsite: formData.schoolWebsite,
@@ -126,20 +106,10 @@ const Login = () => {
           schoolName: formData.schoolName,
           schoolAddress: formData.schoolAddress,
           schoolPhone: formData.schoolPhone,
+          bankName: formData.bankName,
+          bankAccountNumber: formData.bankAccountNumber,
+          settlementBankCode: formData.settlementBankCode,
         });
-
-        if (formData.paymentMethod === "bank") {
-          Object.assign(payload, {
-            bankName: formData.bankName,
-            bankAccountNumber: formData.bankAccountNumber,
-            settlementBankCode: formData.settlementBankCode, // <-- Add this
-          });
-        } else {
-          Object.assign(payload, {
-            mobileMoneyProvider: formData.mobileMoneyProvider,
-            mobileMoneyNumber: formData.mobileMoneyNumber,
-          });
-        }
       }
 
       if (isSignUp) {
@@ -193,137 +163,45 @@ const Login = () => {
           <form onSubmit={handleSubmit} className="space-y-5">
             {isSignUp && (
               <>
-                <Input
-                  name="schoolName"
-                  value={formData.schoolName}
-                  onChange={handleChange}
-                  placeholder="School Name"
-                />
-                <Input
-                  name="schoolAddress"
-                  value={formData.schoolAddress}
-                  onChange={handleChange}
-                  placeholder="School Address"
-                />
-                <Input
-                  name="schoolPhone"
-                  value={formData.schoolPhone}
-                  onChange={handleChange}
-                  placeholder="Phone Number"
-                />
-                <Input
-                  name="schoolWebsite"
-                  value={formData.schoolWebsite}
-                  onChange={handleChange}
-                  placeholder="Website"
-                />
-
-                {/* Payment Method Selection */}
-                <div className="pt-4">
-                  <label className="block text-black-700 font-bold text-2xl mb-5">School Account</label>
-                  <div className="flex space-x-4">
-                    <label>
-                      <input
-                        type="radio"
-                        name="paymentMethod"
-                        value="bank"
-                        checked={formData.paymentMethod === "bank"}
-                        onChange={handlePaymentMethodChange}
-                      />
-                      Bank Account
-                    </label>
-                    <label>
-                      <input
-                        type="radio"
-                        name="paymentMethod"
-                        value="mobileMoney"
-                        checked={formData.paymentMethod === "mobileMoney"}
-                        onChange={handlePaymentMethodChange}
-                      />
-                      Mobile Money
-                    </label>
-                  </div>
-                </div>
+                <Input name="schoolName" value={formData.schoolName} onChange={handleChange} placeholder="School Name" />
+                <Input name="schoolAddress" value={formData.schoolAddress} onChange={handleChange} placeholder="School Address" />
+                <Input name="schoolPhone" value={formData.schoolPhone} onChange={handleChange} placeholder="Phone Number" />
+                <Input name="schoolWebsite" value={formData.schoolWebsite} onChange={handleChange} placeholder="Website" />
 
                 {/* Bank Details */}
-                {formData.paymentMethod === "bank" && (
-                  <>
-                    <div>
-                      <label className="block text-gray-700">Select Bank</label>
-                      <select
-                        name="bankName"
-                        value={formData.bankName}
-                        onChange={handleChange}
-                        className="w-full p-4 text-lg rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-300"
-                        required
-                      >
-                        <option value="">Select Account Type</option>
-                        {availableBanks.map((bank, index) => (
-                          <option key={index} value={bank.name}>
-                            {bank.name}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                    <Input
-                      name="bankAccountNumber"
-                      value={formData.bankAccountNumber}
-                      onChange={handleChange}
-                      placeholder="Account Number"
-                    />
-                    {/* Display account holder name */}
-                    {accountHolderName && (
-                      <p className="text-green-500 mt-2">
-                        Account Holder: {accountHolderName}
-                      </p>
-                    )}
-                  </>
-                )}
-                {/* Mobile Money Details */}
-                {formData.paymentMethod === "mobileMoney" && (
-                  <>
-                    <div>
-                      <label className="block text-gray-700">Select Momo Provider</label>
-                      <select
-                        name="mobileMoneyProvider"
-                        value={formData.mobileMoneyProvider}
-                        onChange={handleChange}
-                        className="w-full p-4 text-lg rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-300"
-                        required
-                      >
-                        <option value="">Select Momo Provider</option>
-                        {momoProviders.map((provider, index) => (
-                          <option key={index} value={provider}>
-                            {provider}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                    <Input
-                      name="mobileMoneyNumber"
-                      value={formData.mobileMoneyNumber}
-                      onChange={handleChange}
-                      placeholder="Mobile Money Number"
-                    />
-                  </>
+                <div>
+                  <label className="block text-gray-700">Select Account</label>
+                  <select
+                    name="bankName"
+                    value={formData.bankName}
+                    onChange={handleChange}
+                    className="w-full p-4 text-lg rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-300"
+                    required
+                  >
+                    <option value="">Select Bank</option>
+                    {availableBanks.map((bank, index) => (
+                      <option key={index} value={bank.name}>
+                        {bank.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <Input
+                  name="bankAccountNumber"
+                  value={formData.bankAccountNumber}
+                  onChange={handleChange}
+                  placeholder="Account Number"
+                />
+                {accountHolderName && (
+                  <p className="text-green-500 mt-2">
+                    Account Holder: {accountHolderName}
+                  </p>
                 )}
               </>
             )}
 
-            <Input
-              type="email"
-              name="schoolEmail"
-              value={formData.schoolEmail}
-              onChange={handleChange}
-              placeholder="Email"
-            />
-            <Input
-              type="password"
-              name="schoolPassword"
-              value={formData.schoolPassword}
-              onChange={handleChange}
-              placeholder="Password"
-            />
+            <Input type="email" name="schoolEmail" value={formData.schoolEmail} onChange={handleChange} placeholder="Email" />
+            <Input type="password" name="schoolPassword" value={formData.schoolPassword} onChange={handleChange} placeholder="Password" />
 
             <div className="pt-4">
               <button type="submit" className="w-full">
@@ -337,8 +215,7 @@ const Login = () => {
   );
 };
 
-// Reusable input component
-const Input = ({ name, type = "text", value, onChange, placeholder }) => (
+const Input = ({ type = "text", name, value, onChange, placeholder }) => (
   <input
     type={type}
     name={name}
@@ -346,6 +223,7 @@ const Input = ({ name, type = "text", value, onChange, placeholder }) => (
     onChange={onChange}
     placeholder={placeholder}
     className="w-full p-4 text-lg rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-300"
+    
   />
 );
 
