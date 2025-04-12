@@ -269,7 +269,7 @@ const Login = () => {
                       name="bankAccountNumber"
                       value={formData.bankAccountNumber}
                       onChange={handleChange}
-                      placeholder="Bank Account Number"
+                      placeholder="Account Number"
                     />
                     {/* Display account holder name */}
                     {accountHolderName && (
