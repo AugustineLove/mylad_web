@@ -1,4 +1,5 @@
 import React from 'react';
+import { NavLink } from 'react-router';
 
 const AppFooter = () => {
   return (
@@ -30,6 +31,10 @@ const AppFooter = () => {
             <li className="hover:text-gray-300 cursor-pointer transition duration-300 ease-in-out transform hover:scale-105">
               <a href="#">Login</a>
             </li>
+            <li className="hover:text-gray-300 cursor-pointer transition duration-300 ease-in-out transform hover:scale-105">
+              <a href="/mobilePolicies">Mobile Policy</a>
+            </li>
+            <NavLink to={'/privacy'} className="hover:text-gray-300 cursor-pointer transition duration-300 ease-in-out transform hover:scale-105">PrivacyPolicy</NavLink>
           </ul>
         </div>
 

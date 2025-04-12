@@ -25,6 +25,8 @@ import ContactPage from "./views/contactPage.jsx";
 import Subscribe from "./views/subscribePage.jsx";
 import PaymentCallback from "./views/paymentCallback.jsx";
 import BankAccountForm from "./views/bankForm.jsx";
+import PrivacyPolicy from "./views/privacyPolicy.jsx";
+import PrivacyPolicyMobile from "./views/mobilePrivacyPolicies.jsx";
 
 const root = document.getElementById("root");
 
@@ -39,6 +41,8 @@ ReactDOM.createRoot(root).render(
         <Route path='about' element={<AboutUs />} />
         <Route path='contact' element={<ContactPage />} />
         <Route path='subscribe' element={<Subscribe />} />
+        <Route path='privacy' element={<PrivacyPolicy />} />
+        <Route path='mobilePolicies' element={<PrivacyPolicyMobile />} />
         <Route path='paymentCallback' element={<PaymentCallback />} />
         <Route path='bankform' element={<BankAccountForm />} />
         <Route path="dashboard" element={<Dashboard />}>
