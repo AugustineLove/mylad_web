@@ -345,7 +345,6 @@ const Input = ({ name, type = "text", value, onChange, placeholder }) => (
     value={value}
     onChange={onChange}
     placeholder={placeholder}
-    required
     className="w-full p-4 text-lg rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-300"
   />
 );

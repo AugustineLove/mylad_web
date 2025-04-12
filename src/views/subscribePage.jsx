@@ -30,7 +30,7 @@ const Subscribe = () => {
 
       const res = await axios.post(`${baseUrl}paystack/initialize`, {
         email: schoolData.schoolData.schoolEmail,
-        amount: 0.05,
+        amount: 500,
       });
 
       const { authorization_url, reference } = res.data.data;
