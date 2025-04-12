@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import AppButton from '../components/button';
 import AboutPhoneCard from '../components/aboutPhone';
+import { NavLink } from 'react-router';
 
 const fadeIn = {
   hidden: { opacity: 0, y: 30 },
@@ -46,7 +47,7 @@ const HomePage = () => {
     <p className='text-lg md:text-xl text-gray-200 leading-relaxed'>
       Transform your school with a powerful, all-in-one management platform. From student records to fee payments, we simplify every process for administrators, teachers, parents, and students.
     </p>
-    <AppButton name='Get Started' width={200} color='#0B0047FF' borderColor='#fff'/>
+    <NavLink to={'/login'} ><AppButton name='Get Started' width={200} color='#0B0047FF' borderColor='#fff'/></NavLink>
   </div>
 
   {/* Right Section: Image */}
