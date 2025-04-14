@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router";
 import axios from "axios";
-import { baseUrl } from "../constants/helpers";
+
 import dayjs from "dayjs"; // To easily handle date manipulation
+import { baseUrl } from "../../constants/helpers";
 
 const UpgradeCallback = () => {
   const [loading, setLoading] = useState(true);

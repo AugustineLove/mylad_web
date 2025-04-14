@@ -13,6 +13,7 @@ const UpgradeSubscription = () => {
       const res = await axios.post(`${baseUrl}paystack/initialize`, {
         email: school.school_email,
         amount: 0.01, // Update this to your actual upgrade fee
+        callBack: "https://myward.tech/dashboard/upgradeCallback"
       });
 
       const { authorization_url, reference } = res.data.data;
