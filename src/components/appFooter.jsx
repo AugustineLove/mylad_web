@@ -55,6 +55,7 @@ const AppFooter = () => {
           <a href="#" rel="noopener noreferrer">
             <img className="w-[180px] h-[50px] object-contain hover:scale-105 transition-transform duration-300" src="playstore.webp" alt="Download from Playstore" />
           </a>
+          <a href='https://drive.google.com/file/d/1E-aqa_uu5mj9k8ayBVhHT5s48oBfYsDm/view?usp=drive_link'>Download here</a>
         </div>
       </div>
 
