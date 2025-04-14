@@ -19,7 +19,7 @@ const HomePage = () => {
         },
         {
           title: 'Real-Time Notifications',
-          description: 'Receive real-time notifications for updates on fees payments, schedules, and school events.',
+          description: 'Receive real-time notifications for updates on fees payments, and optional opt for schedules, and school events notification features.',
           imgSrc: 'src/assets/notifications.png', // Replace with actual image path
         },
         {
