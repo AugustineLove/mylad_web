@@ -1,11 +1,17 @@
-import FeeCatCard from "../../components/dashboard/feetCatCard";
-import { NavLink } from "react-router"; // Fixed import
-import StudentTable from "../../components/dashboard/studentsTable";
+import { useEffect } from "react";
+import { useNavigate } from "react-router";
+import { useSchool } from "../../context/schoolContext"; // Example
 import { useStudents } from "../../context/studentsContext";
+import FeeCatCard from "../../components/dashboard/feetCatCard";
+import { NavLink } from "react-router";
+import StudentTable from "../../components/dashboard/studentsTable";
 
 const DashboardHome = () => {
+  const navigate = useNavigate();
   const { students, loading } = useStudents();
+  const { school } = useSchool(); // assumes `school` object is available
 
+  
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
       {/* Navigation Buttons */}

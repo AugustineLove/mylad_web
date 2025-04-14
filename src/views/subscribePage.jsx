@@ -31,6 +31,7 @@ const Subscribe = () => {
       const res = await axios.post(`${baseUrl}paystack/initialize`, {
         email: schoolData.schoolData.schoolEmail,
         amount: 0.01,
+        callBack: "https://myward.tech/paymentCallback"
       });
 
       const { authorization_url, reference } = res.data.data;

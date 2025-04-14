@@ -52,7 +52,7 @@ const AppFooter = () => {
         {/* Download Section */}
         <div className="flex flex-col space-y-4 items-start">
           <h2 className="text-2xl font-semibold text-white">Download</h2>
-          <a href="https://play.google.com/store" target="_blank" rel="noopener noreferrer">
+          <a href="#" rel="noopener noreferrer">
             <img className="w-[180px] h-[50px] object-contain hover:scale-105 transition-transform duration-300" src="playstore.webp" alt="Download from Playstore" />
           </a>
         </div>
