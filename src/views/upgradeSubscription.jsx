@@ -12,8 +12,8 @@ const UpgradeSubscription = () => {
     try {
       const res = await axios.post(`${baseUrl}paystack/initialize`, {
         email: school.school_email,
-        amount: 0.01, // Update this to your actual upgrade fee
-        callBack: "https://myward.tech/dashboard/upgradeCallback"
+        amount: 200, // Update this to your actual upgrade fee
+        callBack: "http://localhost:5173/dashboard/upgradeCallback"
       });
 
       const { authorization_url, reference } = res.data.data;
@@ -52,7 +52,7 @@ const UpgradeSubscription = () => {
               <span className="text-indigo-500 font-bold">✓</span> Data backups and support
             </li>
             <li className="flex items-start gap-2">
-              <span className="text-indigo-500 font-bold">✓</span> Upgrade Fee: <span className="font-semibold text-gray-900">GHS 0.1</span>
+              <span className="text-indigo-500 font-bold">✓</span> Upgrade Fee: <span className="font-semibold text-gray-900">GHS 200</span>
             </li>
           </ul>
         </div>
@@ -61,7 +61,7 @@ const UpgradeSubscription = () => {
           onClick={handleUpgrade}
           className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-lg py-3 rounded-lg transition duration-300 shadow-md"
         >
-          Pay GHS 0.1 & Upgrade
+          Pay GHS 200 & Upgrade
         </button>
 
         <p className="mt-6 text-sm text-center text-gray-500">

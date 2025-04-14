@@ -26,11 +26,9 @@ const Subscribe = () => {
     
     try {
       
-
-
       const res = await axios.post(`${baseUrl}paystack/initialize`, {
         email: schoolData.schoolData.schoolEmail,
-        amount: 0.01,
+        amount: 500,
         callBack: "https://myward.tech/paymentCallback"
       });
 
@@ -71,7 +69,7 @@ const Subscribe = () => {
               <span className="text-indigo-500 font-bold">✓</span> Backups
             </li>
             <li className="flex items-start gap-2">
-              <span className="text-indigo-500 font-bold">✓</span> One-time registration fee: <span className="font-semibold text-gray-900">GHS 0.1</span>
+              <span className="text-indigo-500 font-bold">✓</span> Registration fee: <span className="font-semibold text-gray-900">GHS 500</span>
             </li>
           </ul>
         </div>
@@ -80,7 +78,7 @@ const Subscribe = () => {
           onClick={handlePayment}
           className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-lg py-3 rounded-lg transition duration-300 shadow-md"
         >
-          Pay GHS 0.1 & Subscribe
+          Pay GHS 500 & Subscribe
         </button>
 
         <p className="mt-6 text-sm text-center text-gray-500">
